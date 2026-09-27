@@ -1,5 +1,5 @@
 import images from "./productImages.json";
-import { MARGEM_CATALOGO_1, MARGEM_CATALOGO_2, precoFinal, valorParcela } from "@/lib/pricing";
+import { MARGEM, precoFinal, valorParcela } from "@/lib/pricing";
 
 export type Catalogo = 1 | 2;
 
@@ -16,39 +16,14 @@ export interface Produto extends ProdutoBase {
   id: string;
   imagem: string | null;
   precoVista: number;
-  parcela: number | null;
+  parcela: number;
+  cores: string[];
+  tamanhos: string[];
 }
 
 const imgMap = images as Record<string, string>;
 
-/** Catálogo 1 — Marks Imports (margem de 80%, sem parcelamento calculado) */
-const catalogo1: ProdutoBase[] = [
-  { nome: "GS10 Mini (41mm)", desc: "Watchfaces atualizadas | Série 10", codigo: "0203", base: 68.6, categoria: "Smartwatches", catalogo: 1 },
-  { nome: "S10 Microwear", desc: "Tradutor | Capinha inclusa", codigo: "0200", base: 68.6, categoria: "Smartwatches", catalogo: 1 },
-  { nome: "ULTRA U3W", desc: "ChatGPT | 1GB | Responde WhatsApp", codigo: "0232", base: 68.6, categoria: "Smartwatches", catalogo: 1 },
-  { nome: "S11 Microwear", desc: "Série 11 | WhatsApp | ChatGPT", codigo: "0247", base: 91, categoria: "Smartwatches", catalogo: 1 },
-  { nome: "M9 Premium", desc: "GPS de alta precisão | AMOLED | IA | IP68", codigo: "0252", base: 187.6, categoria: "Premium", catalogo: 1 },
-  { nome: "SU02 Microwear", desc: "AMOLED | WhatsApp independente | ChatGPT", codigo: "0267", base: 180.6, categoria: "Premium", catalogo: 1 },
-  { nome: "MA33 Microwear (Série 11)", desc: "Comando de voz | AMOLED | 1GB", codigo: "0254", base: 102.2, categoria: "Premium", catalogo: 1 },
-  { nome: "U4 Mini Pro", desc: "Microwear Ultra | IP68 | AMOLED HD | 1GB", codigo: "0265", base: 152.6, categoria: "Premium", catalogo: 1 },
-  { nome: "W11 Pro Microwear", desc: "Série 11 | AMOLED | WhatsApp | 1GB", codigo: "0245", base: 159.6, categoria: "Premium", catalogo: 1 },
-  { nome: "W11 Mini", desc: "Série 11 | IA ChatGPT | 1GB | Compacto", codigo: "0249", base: 128.8, categoria: "Premium", catalogo: 1 },
-  { nome: "Wearzone Fênix", desc: "1ATM | GPS pareado | +100 modos esporte", codigo: "0210", base: 166.6, categoria: "Esportivos", catalogo: 1 },
-  { nome: "Wearzone Easy", desc: "1ATM | Monitoramento de saúde | Bateria estendida", codigo: "0205", base: 133, categoria: "Esportivos", catalogo: 1 },
-  { nome: "Wearzone Action", desc: "3ATM | Alexa | GPS integrado | Strava", codigo: "0182", base: 278.6, categoria: "Esportivos", catalogo: 1 },
-  { nome: "Wearzone Pulse", desc: "3ATM | Alexa | 7 dias de bateria", codigo: "0185", base: 154, categoria: "Esportivos", catalogo: 1 },
-  { nome: "Wearzone Brave", desc: "5ATM água do mar | Resistência militar | GPS dupla frequência", codigo: "0228", base: 399, categoria: "Esportivos", catalogo: 1 },
-  { nome: "Wearzone Dune", desc: "5ATM | Análise para tênis | 6 dias de bateria", codigo: "WZ-DUN", base: 446.6, categoria: "Esportivos", catalogo: 1 },
-  { nome: "Wearzone Flare", desc: "5ATM | Resistência IP69K | GPS integrado", codigo: "0248", base: 399, categoria: "Esportivos", catalogo: 1 },
-  { nome: "ULTRA 4 AI (4G)", desc: "Android independente | Play Store | Chip | Wi-Fi", codigo: "0268", base: 306.6, categoria: "Celulares de pulso", catalogo: 1 },
-  { nome: "W11 AI (5G)", desc: "Android 5G | AMOLED | Chip | Câmera", codigo: "0260", base: 278.6, categoria: "Celulares de pulso", catalogo: 1 },
-  { nome: "Headset WZ08 (Over-Ear)", desc: "ANC profundo | 60h de bateria | Chamadas HD", codigo: "0213", base: 210, categoria: "Áudio", catalogo: 1 },
-  { nome: "TWS WZ06 (In-Ear)", desc: "ANC | ENC | Multi-point", codigo: "0211", base: 126, categoria: "Áudio", catalogo: 1 },
-  { nome: "Óculos W93 Pro c/ Câmera", desc: "Microwear | Câmera integrada | ChatGPT", codigo: "MW-93P", base: 308, categoria: "Óculos IA", catalogo: 1 },
-  { nome: "Óculos W94 c/ IA", desc: "ChatGPT | Tradução simultânea | Áudio Bluetooth", codigo: "MW-W94", base: 83.98, categoria: "Óculos IA", catalogo: 1 },
-];
-
-/** Catálogo 2 — produtos e valores (margem de 40% + parcelamento 3x com taxa) */
+/** Catálogo único — "produtos e valores" (margem de 40% + parcelamento 3x com taxa) */
 const catalogo2: ProdutoBase[] = [
   { nome: "GS10 Mini", desc: "41mm | Watch faces Série 10", codigo: "0203", base: 49, categoria: "Smartwatches", catalogo: 2 },
   { nome: "S10 Microwear", desc: "ChatGPT em português | Tradutor | Capinha", codigo: "0200", base: 49, categoria: "Smartwatches", catalogo: 2 },
@@ -139,20 +114,44 @@ const catalogo2: ProdutoBase[] = [
   { nome: "Pulseira listrada pino", desc: "20mm/22mm", codigo: "0432", base: 2, categoria: "Acessórios", catalogo: 2 },
 ];
 
+const CORES: Record<string, string[]> = {
+  Smartwatches: ["Preto", "Prata", "Rosa"],
+  Premium: ["Preto", "Prata", "Rosa"],
+  Wearzone: ["Preto", "Prata", "Rosa"],
+  "Celulares de pulso": ["Preto", "Prata"],
+  Kits: ["Preto", "Prata", "Rosa"],
+  "Áudio": ["Preto", "Branco"],
+};
+
+function coresDe(p: ProdutoBase): string[] {
+  if (p.nome.startsWith("Pulseira")) return ["Preto", "Prata", "Dourado"];
+  if (p.nome.startsWith("Capinha")) return ["Transparente", "Preto", "Rosa"];
+  return CORES[p.categoria] ?? [];
+}
+
+/** Agrupa itens com o mesmo nome (ex.: tamanhos diferentes) em um único produto. */
 function montar(itens: ProdutoBase[]): Produto[] {
-  return itens.map((p, i) => {
-    const margem = p.catalogo === 1 ? MARGEM_CATALOGO_1 : MARGEM_CATALOGO_2;
-    const precoVista = precoFinal(p.base, margem);
+  const grupos = new Map<string, ProdutoBase[]>();
+  for (const p of itens) {
+    const k = p.nome.toLowerCase();
+    grupos.set(k, [...(grupos.get(k) ?? []), p]);
+  }
+  return Array.from(grupos.values()).map((g, i) => {
+    const p = g[0];
+    const precoVista = precoFinal(p.base, MARGEM);
+    const imagem = g.map((x) => (x.codigo ? imgMap[x.codigo] : undefined)).find(Boolean) ?? null;
     return {
       ...p,
-      id: `c${p.catalogo}-${p.codigo ?? i}-${i}`,
-      imagem: p.codigo ? (imgMap[p.codigo] ?? null) : null,
+      id: `p-${p.codigo ?? i}-${i}`,
+      imagem,
       precoVista,
-      parcela: p.catalogo === 2 ? valorParcela(precoVista) : null,
+      parcela: valorParcela(precoVista),
+      cores: coresDe(p),
+      tamanhos: g.length > 1 ? g.map((x) => x.desc) : [],
     };
   });
 }
 
-export const produtos: Produto[] = [...montar(catalogo1), ...montar(catalogo2)];
+export const produtos: Produto[] = montar(catalogo2);
 
 export const categorias: string[] = Array.from(new Set(produtos.map((p) => p.categoria)));
