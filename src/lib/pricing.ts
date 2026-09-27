@@ -1,9 +1,9 @@
 /**
  * Regras de precificação da vitrine.
- * MARGEM          -> acréscimo sobre o valor do PDF (+40%)
+ * MARGEM          -> acréscimo sobre o valor do PDF (+80%)
  * TAXA_MAQUININHA -> juros do parcelamento em 3x
  */
-export const MARGEM = 0.4; // 40%
+export const MARGEM = 0.8; // 80%
 export const TAXA_MAQUININHA = 0.05; // 5%
 export const PARCELAS = 3;
 
