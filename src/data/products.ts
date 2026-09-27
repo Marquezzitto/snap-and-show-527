@@ -137,7 +137,7 @@ function montar(itens: ProdutoBase[]): Produto[] {
     grupos.set(k, [...(grupos.get(k) ?? []), p]);
   }
   return Array.from(grupos.values()).map((g, i) => {
-    const p = g[0];
+    const p = g[0]!;
     const precoVista = precoFinal(p.base, MARGEM);
     const imagem = g.map((x) => (x.codigo ? imgMap[x.codigo] : undefined)).find(Boolean) ?? null;
     return {
