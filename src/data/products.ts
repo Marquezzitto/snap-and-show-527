@@ -54,7 +54,7 @@ const catalogo2: ProdutoBase[] = [
   { nome: "W11 Pro", desc: "Séries 11 | WhatsApp | AMOLED | 1GB", codigo: "0245", base: 114, categoria: "Premium", catalogo: 2 },
   { nome: "W11 Pro Mini", desc: "Séries 11 | WhatsApp | AMOLED | 1GB", codigo: "0244", base: 114, categoria: "Premium", catalogo: 2 },
   { nome: "W11G", desc: "GPS integrado | ChatGPT | AMOLED | IP68 | 400mAh", codigo: "MW-W1G", base: 149, categoria: "Premium", catalogo: 2 },
-  { nome: "W11X", desc: "Séries 11 | WhatsApp | ChatGPT | 1GB", codigo: "025B", base: 89, categoria: "Smartwatches", catalogo: 2 },
+  { nome: "W11X", desc: "Séries 11 | WhatsApp | ChatGPT | 1GB", codigo: "0258", base: 89, categoria: "Smartwatches", catalogo: 2 },
   { nome: "W29s", desc: "Série 9 | Função 2 gestos | 47mm", codigo: "0148", base: 54, categoria: "Smartwatches", catalogo: 2 },
   { nome: "W59 Mini", desc: "2ª geração | Função dois gestos | 41mm", codigo: "0147", base: 64, categoria: "Smartwatches", catalogo: 2 },
   { nome: "XH9", desc: "Tradicional 48mm | Função dois gestos", codigo: "0152", base: 45, categoria: "Smartwatches", catalogo: 2 },

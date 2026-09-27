@@ -52,6 +52,15 @@ function Card({ p }: { p: Produto }) {
         <span className="absolute left-3 top-3 rounded-full bg-background/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-accent backdrop-blur">
           {p.categoria}
         </span>
+        {cor && p.cores.length > 1 && (
+          <span
+            key={cor}
+            className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-background/85 px-2.5 py-1 text-[11px] font-semibold text-foreground backdrop-blur animate-in fade-in zoom-in-95 duration-300"
+          >
+            <span style={{ background: COR_SWATCH[cor] }} className="h-3 w-3 rounded-full border border-border" />
+            {cor}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-3 p-5">
@@ -61,22 +70,37 @@ function Card({ p }: { p: Produto }) {
         </div>
 
         {p.cores.length > 1 && (
-          <div>
-            <p className="text-[11px] text-muted-foreground">Cor: <span className="text-foreground">{cor}</span></p>
-            <div className="mt-1.5 flex flex-wrap gap-2">
-              {p.cores.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  aria-label={`Cor ${c}`}
-                  title={c}
-                  onClick={() => setCor(c)}
-                  style={{ background: COR_SWATCH[c] }}
-                  className={`h-6 w-6 rounded-full border-2 transition-all ${cor === c ? "border-accent ring-2 ring-accent/40" : "border-border"}`}
-                />
-              ))}
+          <fieldset>
+            <legend className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Escolha a cor
+            </legend>
+            <div className="flex flex-wrap gap-1.5">
+              {p.cores.map((c) => {
+                const ativo = cor === c;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    aria-pressed={ativo}
+                    onClick={() => setCor(c)}
+                    className={`inline-flex items-center gap-1.5 rounded-full border py-1 pl-1 pr-2.5 text-xs font-medium transition-all duration-200 active:scale-95 ${
+                      ativo
+                        ? "border-accent bg-accent/15 text-foreground shadow-[0_0_16px_-4px_var(--glow)]"
+                        : "border-border bg-secondary text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                    }`}
+                  >
+                    <span
+                      style={{ background: COR_SWATCH[c] }}
+                      className={`flex h-5 w-5 items-center justify-center rounded-full border border-border text-[10px] font-bold transition-transform ${ativo ? "scale-110" : ""}`}
+                    >
+                      {ativo && <span className="rounded-full bg-background/80 px-1 text-accent">✓</span>}
+                    </span>
+                    {c}
+                  </button>
+                );
+              })}
             </div>
-          </div>
+          </fieldset>
         )}
 
         {p.tamanhos.length > 1 && (
