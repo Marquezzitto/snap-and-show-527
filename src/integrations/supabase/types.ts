@@ -14,7 +14,126 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          assunto: string
+          created_at: string
+          email: string
+          id: string
+          mensagem: string
+          nome: string
+          telefone: string
+        }
+        Insert: {
+          assunto: string
+          created_at?: string
+          email: string
+          id?: string
+          mensagem: string
+          nome: string
+          telefone?: string
+        }
+        Update: {
+          assunto?: string
+          created_at?: string
+          email?: string
+          id?: string
+          mensagem?: string
+          nome?: string
+          telefone?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          cliente: Json
+          created_at: string
+          email_enviado: boolean
+          frete: number | null
+          frete_servico: string | null
+          id: string
+          itens: Json
+          numero: string
+          subtotal: number
+          total: number
+          user_id: string
+        }
+        Insert: {
+          cliente: Json
+          created_at?: string
+          email_enviado?: boolean
+          frete?: number | null
+          frete_servico?: string | null
+          id?: string
+          itens: Json
+          numero: string
+          subtotal: number
+          total: number
+          user_id: string
+        }
+        Update: {
+          cliente?: Json
+          created_at?: string
+          email_enviado?: boolean
+          frete?: number | null
+          frete_servico?: string | null
+          id?: string
+          itens?: Json
+          numero?: string
+          subtotal?: number
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          bairro: string
+          cep: string
+          cidade: string
+          complemento: string
+          created_at: string
+          email: string
+          estado: string
+          id: string
+          nome: string
+          numero: string
+          rua: string
+          telefone: string
+          updated_at: string
+        }
+        Insert: {
+          bairro?: string
+          cep?: string
+          cidade?: string
+          complemento?: string
+          created_at?: string
+          email?: string
+          estado?: string
+          id: string
+          nome?: string
+          numero?: string
+          rua?: string
+          telefone?: string
+          updated_at?: string
+        }
+        Update: {
+          bairro?: string
+          cep?: string
+          cidade?: string
+          complemento?: string
+          created_at?: string
+          email?: string
+          estado?: string
+          id?: string
+          nome?: string
+          numero?: string
+          rua?: string
+          telefone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
