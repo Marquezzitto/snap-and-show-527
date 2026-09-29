@@ -43,7 +43,7 @@ function Conta() {
     setSalvando(true);
     const { error } = await supabase.from("profiles").upsert({ id: user.id, ...p, updated_at: new Date().toISOString() });
     setSalvando(false);
-    if (error) return toast.error("Não foi possível salvar");
+    if (error) { toast.error("Não foi possível salvar"); return; }
     toast.success("Cadastro salvo!");
     if (count > 0) navigate({ to: "/checkout" });
   }
