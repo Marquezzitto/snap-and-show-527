@@ -39,6 +39,8 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
@@ -83,6 +85,8 @@
   --input: oklch(0.29 0.022 262);
   --ring: oklch(0.8 0.16 180);
   --glow: oklch(0.8 0.16 180 / 40%);
+  --whatsapp: oklch(0.72 0.17 150);
+  --whatsapp-foreground: oklch(0.99 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
