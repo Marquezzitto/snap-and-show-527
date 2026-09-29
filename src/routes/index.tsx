@@ -1,8 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { produtos, type Produto } from "@/data/products";
-import { brl, MARGEM, PARCELAS, TAXA_MAQUININHA } from "@/lib/pricing";
-import logo from "@/assets/marks-logo.png.asset.json";
+import { brl, PARCELAS } from "@/lib/pricing";
+import { toast } from "sonner";
+import { ShoppingBag } from "lucide-react";
+import { useCart } from "@/lib/cart";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteFooter } from "@/components/site/SiteFooter";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,8 +29,6 @@ export const Route = createFileRoute("/")({
   component: Vitrine,
 });
 
-const WHATSAPP = "5511985978100";
-
 const COR_SWATCH: Record<string, string> = {
   Preto: "oklch(0.2 0 0)",
   Prata: "oklch(0.82 0.01 250)",
@@ -39,8 +41,7 @@ const COR_SWATCH: Record<string, string> = {
 function Card({ p }: { p: Produto }) {
   const [cor, setCor] = useState(p.cores[0] ?? "");
   const [tam, setTam] = useState(p.tamanhos[0] ?? "");
-  const detalhes = [cor && `cor ${cor}`, tam && `tamanho ${tam}`].filter(Boolean).join(", ");
-  const msg = `Olá! Tenho interesse no ${p.nome}${detalhes ? ` (${detalhes})` : ""} - ${brl(p.precoVista)}.`;
+  const { add, setOpen } = useCart();
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_0_40px_-12px_var(--glow)]">
       <div className="relative aspect-4/3 overflow-hidden bg-secondary">
@@ -119,14 +120,16 @@ function Card({ p }: { p: Produto }) {
           <p className="text-xs text-accent">ou {PARCELAS}x de {brl(p.parcela)}</p>
         </div>
 
-        <a
-          href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        <button
+          type="button"
+          onClick={() => {
+            add({ id: p.id, cor, tam });
+            toast.success(`${p.nome} adicionado ao carrinho`, { action: { label: "Ver carrinho", onClick: () => setOpen(true) } });
+          }}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:scale-[0.98]"
         >
-          Comprar
-        </a>
+          <ShoppingBag className="h-4 w-4" /> Adicionar ao carrinho
+        </button>
       </div>
     </article>
   );
@@ -151,25 +154,14 @@ function Vitrine() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-5 py-4">
-          <div className="mr-auto flex items-center gap-3">
-            <img src={logo.url} alt="Marks Imports" className="h-12 w-12 rounded-lg object-cover" />
-            <div>
-            <p className="text-lg font-black tracking-[0.2em] text-foreground">MARKS IMPORTS</p>
-            <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
-              Vitrine oficial 2026
-            </p>
-            </div>
-          </div>
-          <input
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            placeholder="Buscar produto..."
-            className="w-full rounded-xl border border-border bg-secondary px-4 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent sm:w-64"
-          />
-        </div>
-      </header>
+      <SiteHeader>
+        <input
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          placeholder="Buscar produto..."
+          className="w-full rounded-xl border border-border bg-secondary px-4 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent md:order-none md:w-64"
+        />
+      </SiteHeader>
 
       <section className="border-b border-border bg-gradient-to-b from-secondary/50 to-background">
         <div className="mx-auto max-w-7xl px-5 py-16 sm:py-24">
@@ -184,7 +176,7 @@ function Vitrine() {
           </h1>
           <p className="mt-5 max-w-xl text-sm text-muted-foreground sm:text-base">
             Smartwatches Microwear e Wearzone, áudio com cancelamento de ruído, óculos com IA e
-            acessórios. Envio para todo o Brasil e parcelamento em até {PARCELAS}x.
+            acessórios. Envio para todo o Brasil, parcelamento em até {PARCELAS}x e frete grátis acima de R$ 420.
           </p>
         </div>
       </section>
@@ -221,17 +213,7 @@ function Vitrine() {
         )}
       </div>
 
-      <footer className="mt-16 border-t border-border">
-        <div className="mx-auto max-w-7xl px-5 py-10 text-xs text-muted-foreground">
-          <img src={logo.url} alt="Marks Imports" className="h-20 w-20 rounded-xl object-cover" />
-          <p className="mt-2">
-            Preços com margem de {Math.round(MARGEM * 100)}%. Parcelamento
-            em {PARCELAS}x já inclui taxa de {(TAXA_MAQUININHA * 100).toFixed(1).replace(".", ",")}%
-            da maquininha.
-          </p>
-          <p className="mt-2">(11) 98597-8100 • @spmarks_imports</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
