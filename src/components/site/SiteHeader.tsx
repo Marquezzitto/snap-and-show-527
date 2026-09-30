@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingBag, User, Truck } from "lucide-react";
-import logo from "@/assets/marks-logo.png.asset.json";
 import { useCart, FRETE_GRATIS_MIN } from "@/lib/cart";
 import { useAuth } from "@/hooks/use-auth";
 import { brl } from "@/lib/pricing";
@@ -19,7 +18,7 @@ export function SiteHeader({ children }: { children?: React.ReactNode }) {
       <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-5 py-3">
           <Link to="/" className="mr-auto flex items-center gap-3">
-            <img src={logo.url} alt="Marks Imports" className="h-11 w-11 rounded-lg object-cover" />
+            <img src="/marks-logo.png" alt="Marks Imports" className="h-11 w-11 rounded-lg object-cover" />
             <div className="hidden sm:block">
               <p className="text-base font-black tracking-[0.2em] text-foreground">MARKS IMPORTS</p>
               <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Vitrine oficial</p>
