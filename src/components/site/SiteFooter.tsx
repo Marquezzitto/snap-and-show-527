@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/marks-logo.png.asset.json";
 import { MARGEM, PARCELAS, TAXA_MAQUININHA } from "@/lib/pricing";
 
 export function SiteFooter() {
@@ -8,7 +7,7 @@ export function SiteFooter() {
     <footer className="mt-16 border-t border-border">
       <div className="mx-auto grid max-w-7xl gap-6 px-5 py-10 text-xs text-muted-foreground sm:grid-cols-3">
         <div>
-          <img src={logo.url} alt="Marks Imports" className="h-16 w-16 rounded-xl object-cover" />
+          <img src="/marks-logo.png" alt="Marks Imports" className="h-16 w-16 rounded-xl object-cover" />
           <p className="mt-3">Parcelamento em {PARCELAS}x com taxa de {(TAXA_MAQUININHA * 100).toFixed(0)}% da maquininha.</p>
           <p className="mt-1">Frete grátis acima de R$ 420,00.</p>
         </div>
