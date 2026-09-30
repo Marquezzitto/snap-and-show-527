@@ -7,6 +7,7 @@ import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { useEstoque } from "@/lib/estoque";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,10 +39,11 @@ const COR_SWATCH: Record<string, string> = {
   Transparente: "linear-gradient(135deg, oklch(0.9 0 0 / .3), oklch(0.6 0 0 / .1))",
 };
 
-function Card({ p }: { p: Produto }) {
+function Card({ p, qtd }: { p: Produto; qtd: number | undefined }) {
   const [cor, setCor] = useState(p.cores[0] ?? "");
   const [tam, setTam] = useState(p.tamanhos[0] ?? "");
   const { add, setOpen } = useCart();
+  const esgotado = qtd !== undefined && qtd <= 0;
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_0_40px_-12px_var(--glow)]">
       <div className="relative aspect-4/3 overflow-hidden bg-secondary">
@@ -120,15 +122,17 @@ function Card({ p }: { p: Produto }) {
           <p className="text-xs text-accent">ou {PARCELAS}x de {brl(p.parcela)}</p>
         </div>
 
+        {qtd !== undefined && qtd > 0 && qtd <= 5 && <p className="text-xs font-semibold text-accent">Últimas {qtd} unidades</p>}
         <button
           type="button"
+          disabled={esgotado}
           onClick={() => {
             add({ id: p.id, cor, tam });
             toast.success(`${p.nome} adicionado ao carrinho`, { action: { label: "Ver carrinho", onClick: () => setOpen(true) } });
           }}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:scale-[0.98]"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
-          <ShoppingBag className="h-4 w-4" /> Adicionar ao carrinho
+          <ShoppingBag className="h-4 w-4" /> {esgotado ? "Esgotado" : "Adicionar ao carrinho"}
         </button>
       </div>
     </article>
@@ -138,6 +142,7 @@ function Card({ p }: { p: Produto }) {
 function Vitrine() {
   const [categoria, setCategoria] = useState("Todas");
   const [busca, setBusca] = useState("");
+  const { estoque } = useEstoque();
 
   const lista = useMemo(() => {
     return produtos.filter((p) => {
@@ -202,7 +207,7 @@ function Vitrine() {
 
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {lista.map((p) => (
-            <Card key={p.id} p={p} />
+            <Card key={p.id} p={p} qtd={p.codigo ? estoque[p.codigo] : undefined} />
           ))}
         </div>
 

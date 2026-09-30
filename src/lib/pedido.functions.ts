@@ -50,6 +50,17 @@ export const criarPedido = createServerFn({ method: "POST" })
     const { linhas, subtotal, qtd } = calcular(data.itens);
     if (!linhas.length) throw new Error("Carrinho vazio");
 
+    // Verifica estoque (produtos sem registro não têm controle)
+    const pedidoPorCodigo = new Map<string, number>();
+    for (const l of linhas) if (l.codigo) pedidoPorCodigo.set(l.codigo, (pedidoPorCodigo.get(l.codigo) ?? 0) + l.qtd);
+    const { data: est } = await context.supabase.from("estoque").select("codigo, quantidade").in("codigo", [...pedidoPorCodigo.keys()]);
+    for (const e of est ?? []) {
+      if ((pedidoPorCodigo.get(e.codigo) ?? 0) > e.quantidade) {
+        const nome = linhas.find((l) => l.codigo === e.codigo)?.nome ?? e.codigo;
+        throw new Error(e.quantidade > 0 ? `${nome}: só temos ${e.quantidade} em estoque` : `${nome} está esgotado`);
+      }
+    }
+
     let frete: number | null = 0;
     let freteServico: string | null = "Grátis (acima de R$ 420)";
     if (subtotal < FRETE_GRATIS_MIN) {
@@ -77,6 +88,11 @@ export const criarPedido = createServerFn({ method: "POST" })
       numero = "";
     }
     if (!numero) throw new Error("Não foi possível gerar o número do orçamento");
+
+    for (const e of est ?? []) {
+      const nova = Math.max(0, e.quantidade - (pedidoPorCodigo.get(e.codigo) ?? 0));
+      await supabaseAdmin.from("estoque").update({ quantidade: nova, updated_at: new Date().toISOString() }).eq("codigo", e.codigo);
+    }
 
     const html = `<h2>Novo orçamento ${numero}</h2>
 <p><b>Cliente:</b> ${esc(cliente.nome)}<br><b>E-mail:</b> ${esc(cliente.email)}<br><b>Telefone:</b> ${esc(cliente.telefone)}<br><b>Endereço:</b> ${esc(cliente.endereco)}</p>
@@ -107,6 +123,7 @@ export const enviarContato = createServerFn({ method: "POST" })
     await enviarEmailLoja(
       `Fale Conosco: ${data.assunto} - ${data.nome}`,
       `<h2>${esc(data.assunto)}</h2><p><b>${esc(data.nome)}</b><br>${esc(data.email)}<br>${esc(data.telefone)}</p><p>${esc(data.mensagem).replace(/\n/g, "<br>")}</p>`,
+      data.email,
     );
     return { ok: true };
   });
