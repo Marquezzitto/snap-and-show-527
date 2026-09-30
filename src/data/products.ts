@@ -10,6 +10,8 @@ export interface ProdutoBase {
   base: number;
   categoria: string;
   catalogo: Catalogo;
+  cores?: string[];
+  tamanhos?: string[];
 }
 
 export interface Produto extends ProdutoBase {
@@ -23,7 +25,97 @@ export interface Produto extends ProdutoBase {
 
 const imgMap = images as Record<string, string>;
 
-/** Catálogo único — "produtos e valores" (margem de 40% + parcelamento 3x com taxa) */
+/** Cores e opções exatas extraídas do catálogo da distribuidora */
+const CORES_DISTRIBUIDORA: Record<string, string[]> = {
+  "0013": [],
+  "0012": [],
+  "0210": ["Verde"],
+  "0203": ["Branco", "Preto"],
+  "0263": ["Dourado", "Prata", "Preto", "Rosa", "Starlight"],
+  "0213": ["Branco"],
+  "0252": ["Prata", "Preto"],
+  "0231": ["Branco", "Laranja"],
+  "0254": ["Laranja", "Prata", "Preto"],
+  "0255": ["Prata/Azul", "Preto", "Titanium/Verde"],
+  "0271": ["Dourado", "Prata", "Preto"],
+  "0270": ["Prata", "Preto"],
+  "0010": [],
+  "0011": [],
+  "0016": ["Amarelo", "Azul", "Branco", "Laranja", "Preto", "Rosa", "Verde", "Vermelho"],
+  "0007": ["Amarelo", "Azul", "Branco", "Laranja", "Lilás", "Preto", "Rosa Pink", "Roxo", "Verde", "Vinho"],
+  "0411": ["Azul Marinho", "Cinza", "Grafite", "Laranja", "Preto", "Rosa Claro", "Turquesa", "Verde Militar"],
+  "0412": ["Branco", "Laranja", "Preto", "Rosa Claro", "Verde Petróleo"],
+  "0095": ["Verde", "Preto", "Marrom"],
+  "0036": ["Azul", "Preto", "Prata"],
+  "0085": ["Dourado", "Preto", "Prata"],
+  "0035": ["Azul Marinho", "Dourado", "Prata", "Preto", "Rosa", "Rose Gold"],
+  "0431": ["Dourado", "Prata", "Preto", "Rose Gold"],
+  "0430": ["Dourado", "Prata", "Preto"],
+  "0429": ["Dourado", "Prata", "Preto", "Rose Gold"],
+  "0418": ["Dourado", "Prata", "Preto", "Rose Gold"],
+  "0083": ["Azul Marinho", "Cinza Claro", "Grafite", "Marrom", "Preto"],
+  "0428": ["Branco", "Café", "Caramelo", "Cinza", "Marrom", "Nude", "Preto", "Rosé"],
+  "0086": ["Cinza", "Preto"],
+  "0090": ["Mostarda", "Marrom", "Preto"],
+  "0089": ["Bege", "Branco", "Caramelo", "Cinza", "Marrom", "Nude", "Preto", "Verde"],
+  "0427": ["Azul", "Branco", "Cinza", "Marrom", "Nude", "Preto", "Verde"],
+  "0051": ["Azul Marinho", "Branco", "Cinza/Laranja", "Lilás", "Marrom", "Preto", "Rosa", "Verde Militar"],
+  "0050": ["Azul Marinho", "Branco", "Cinza/Laranja", "Lilás", "Marrom", "Preto", "Rosa", "Vinho"],
+  "0075": ["Branco/Preto", "Marfim", "Rosa", "Rose/Nude"],
+  "0403": ["Azul Marinho", "Laranja", "Preto/Branco", "Rosé", "Verde Militar"],
+  "0004": ["Amarelo", "Azul", "Dourado", "Laranja", "Lilás", "Prata", "Preto", "Rosa", "Rose Gold", "Roxo", "Verde", "Vermelho"],
+  "0003": ["Amarelo", "Azul", "Champanhe", "Cinza", "Dourado", "Laranja", "Lilás", "Prata", "Preto", "Rosa", "Rose Gold", "Verde", "Vermelho"],
+  "0097": ["Dourado", "Prata", "Preto", "Rose Gold"],
+  "0099": ["Dourado", "Prata", "Preto", "Rose Gold"],
+  "0417": ["Furta Cor", "Lilás", "Prata", "Rose", "Starlight"],
+  "0061": ["Cobre", "Prata", "Preto", "Rose Gold"],
+  "0432": ["Preto", "Cinza", "Azul", "Vermelho"],
+  "0200": ["Preto", "Prata", "Rose"],
+  "0232": ["Preto", "Prata", "Laranja"],
+  "0247": ["Preto", "Prata", "Rose"],
+  "0264": ["Preto", "Prata", "Dourado", "Rosa"],
+  "0246": ["Preto", "Prata", "Titanium"],
+  "0106": ["Preto", "Branco"],
+  "0267": ["Preto", "Prata", "Laranja"],
+  "MW-SU4": ["Preto", "Laranja", "Titanium"],
+  "0265": ["Preto", "Prata", "Laranja"],
+  "0253": ["Preto", "Prata", "Laranja"],
+  "0241": ["Preto", "Prata", "Laranja"],
+  "0233": ["Preto", "Prata", "Laranja"],
+  "0257": ["Preto", "Prata", "Laranja"],
+  "0262": ["Preto", "Prata", "Titanium"],
+  "0261": ["Preto", "Prata", "Laranja"],
+  "0201": ["Preto", "Prata", "Rose"],
+  "0225": ["Preto", "Prata", "Rose"],
+  "0224": ["Preto", "Prata", "Rose"],
+  "0234": ["Preto", "Prata", "Rose"],
+  "0249": ["Preto", "Prata", "Rose"],
+  "0245": ["Preto", "Prata", "Rose"],
+  "0244": ["Preto", "Prata", "Rose"],
+  "MW-W1G": ["Preto", "Prata", "Laranja"],
+  "0258": ["Preto", "Prata", "Rose"],
+  "0148": ["Preto", "Prata", "Rose"],
+  "0147": ["Preto", "Prata", "Rose"],
+  "0152": ["Preto", "Prata"],
+  "0221": ["Preto", "Prata"],
+  "0223": ["Preto", "Prata", "Rose"],
+  "0230": ["Preto", "Prata", "Rose"],
+  "0220": ["Preto", "Prata", "Laranja"],
+  "0268": ["Preto", "Laranja", "Titanium"],
+  "0260": ["Preto", "Titanium"],
+  "0182": ["Preto", "Verde Militar"],
+  "0228": ["Preto", "Camuflado"],
+  "WZ-DUN": ["Preto", "Areia"],
+  "0205": ["Preto", "Rosa"],
+  "0248": ["Preto", "Laranja"],
+  "WZ-KRO": ["Preto", "Prata"],
+  "0207": ["Preto", "Dourado", "Rosa"],
+  "0185": ["Preto", "Rosa"],
+  "0211": ["Preto", "Branco"],
+  "MW-93P": ["Preto"],
+  "MW-W94": ["Preto"],
+};
+
 const catalogo2: ProdutoBase[] = [
   { nome: "GS10 Mini", desc: "41mm | Watch faces Série 10", codigo: "0203", base: 49, categoria: "Smartwatches", catalogo: 2 },
   { nome: "S10 Microwear", desc: "ChatGPT em português | Tradutor | Capinha", codigo: "0200", base: 49, categoria: "Smartwatches", catalogo: 2 },
@@ -79,17 +171,17 @@ const catalogo2: ProdutoBase[] = [
   { nome: "N11 Ultra", desc: "Chamadas Bluetooth | Assistente de voz", codigo: "0270", base: 39.99, categoria: "Áudio", catalogo: 2 },
   { nome: "Óculos W93 Pro", desc: "Com câmera | Microwear | ChatGPT | Tradução por IA", codigo: "MW-93P", base: 220, categoria: "Óculos IA", catalogo: 2 },
   { nome: "Óculos W94", desc: "ChatGPT | Tradução por IA | Chamadas Bluetooth", codigo: "MW-W94", base: 59.99, categoria: "Óculos IA", catalogo: 2 },
-  { nome: "Capinha 360 com proteção de tela", desc: "Silicone com cobertura de tela", codigo: "0013", base: 2, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Capinha 360 sem proteção de tela", desc: "Silicone sem cobertura de tela", codigo: "0012", base: 2, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Película para smartwatches", desc: "Proteção de tela", codigo: "0010", base: 2, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Película reforçada", desc: "Proteção 3D reforçada", codigo: "0011", base: 2, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Capinha 360 com proteção de tela", desc: "Silicone com cobertura de tela", codigo: "0013", base: 2, categoria: "Acessórios", catalogo: 2, tamanhos: ["41mm", "45mm", "49mm"] },
+  { nome: "Capinha 360 sem proteção de tela", desc: "Silicone sem cobertura de tela", codigo: "0012", base: 2, categoria: "Acessórios", catalogo: 2, tamanhos: ["41mm", "42mm", "45mm", "46mm", "49mm"] },
+  { nome: "Película para smartwatches", desc: "Proteção de tela", codigo: "0010", base: 2, categoria: "Acessórios", catalogo: 2, tamanhos: ["41mm", "42mm", "45mm", "46mm", "49mm"] },
+  { nome: "Película reforçada", desc: "Proteção 3D reforçada", codigo: "0011", base: 2, categoria: "Acessórios", catalogo: 2, tamanhos: ["49mm"] },
   { nome: "Pulseira Alpina", desc: "42mm/44mm/45mm/49mm", codigo: "0007", base: 7, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira Alpina fecho preto", desc: "38mm/40mm/41mm", codigo: "0411", base: 9, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira Alpina pino 22mm", desc: "Fecho fixo", codigo: "0412", base: 9, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira couro liso 22mm", desc: "Pino universal", codigo: "0095", base: 12, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira de couro", desc: "42mm/44mm/45mm/47mm/49mm", codigo: "0083", base: 27, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira de couro", desc: "42mm a 49mm", codigo: "0083", base: 27, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira de couro fit slim", desc: "38mm/40mm/41mm", codigo: "0428", base: 25, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira de couro magnética dobrável", desc: "42mm/44mm/45mm/47mm/49mm", codigo: "0086", base: 12, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira de couro magnética dobrável", desc: "42mm a 49mm", codigo: "0086", base: 12, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira de couro microfibra", desc: "38mm/40mm/41mm", codigo: "0090", base: 25, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira de couro microfibra pino 22mm", desc: "Universal", codigo: "0089", base: 25, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira de couro slim", desc: "38mm/40mm/41mm", codigo: "0427", base: 22, categoria: "Acessórios", catalogo: 2 },
@@ -98,60 +190,37 @@ const catalogo2: ProdutoBase[] = [
   { nome: "Pulseira de aço 3 elos premium", desc: "42mm a 49mm", codigo: "0035", base: 28, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira de aço 3.2 elos", desc: "42mm a 49mm", codigo: "0431", base: 23, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira de aço 5 elos", desc: "42mm a 49mm", codigo: "0430", base: 23, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira de aço 7 elos", desc: "38mm/41mm/42mm/49mm", codigo: "0429", base: 23, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira de aço elos pino", desc: "18mm/22mm", codigo: "0418", base: 30, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira de aço 7 elos", desc: "38mm a 49mm", codigo: "0429", base: 23, categoria: "Acessórios", catalogo: 2, tamanhos: ["38mm/41mm", "42mm/49mm"] },
+  { nome: "Pulseira de aço elos pino", desc: "18mm/22mm", codigo: "0418", base: 30, categoria: "Acessórios", catalogo: 2, tamanhos: ["18mm", "22mm"] },
   { nome: "Pulseira elo magnético com fecho de laço", desc: "38mm/40mm/41mm", codigo: "0051", base: 19, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira elo magnético laço", desc: "42mm a 49mm", codigo: "0050", base: 19, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira elo magnético laço pino 22mm", desc: "Universal", codigo: "0075", base: 14, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira elo magnético fit", desc: "42mm/44mm/45mm/49mm", codigo: "0403", base: 13, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira elo magnético link pino 22mm", desc: "Universal", codigo: "0439", base: 15, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira milanesa", desc: "42mm/44mm/45mm/49mm", codigo: "0003", base: 8, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira milanesa", desc: "38mm/40mm/41mm", codigo: "0004", base: 8, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira milanesa com fecho magnético", desc: "38mm/40mm/41mm", codigo: "0097", base: 30, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira milanesa com fecho magnético", desc: "42mm/44mm/45mm/49mm", codigo: "0099", base: 30, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira elo magnético fit", desc: "42mm a 49mm", codigo: "0403", base: 13, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira milanesa 42 a 49mm", desc: "42mm/44mm/45mm/49mm", codigo: "0003", base: 8, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira milanesa 38 a 41mm", desc: "38mm/40mm/41mm", codigo: "0004", base: 8, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira milanesa com fecho magnético 38/41mm", desc: "38mm/40mm/41mm", codigo: "0097", base: 30, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira milanesa com fecho magnético 42/49mm", desc: "42mm a 49mm", codigo: "0099", base: 30, categoria: "Acessórios", catalogo: 2 },
   { nome: "Pulseira milanesa de pino 18mm", desc: "Universal", codigo: "0417", base: 10, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira milanesa loop", desc: "42mm/44mm/45mm/49mm", codigo: "0061", base: 24, categoria: "Acessórios", catalogo: 2 },
-  { nome: "Pulseira listrada pino", desc: "20mm/22mm", codigo: "0432", base: 2, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira milanesa loop", desc: "42mm a 49mm", codigo: "0061", base: 24, categoria: "Acessórios", catalogo: 2 },
+  { nome: "Pulseira listrada pino", desc: "20mm/22mm", codigo: "0432", base: 2, categoria: "Acessórios", catalogo: 2, tamanhos: ["20mm", "22mm"] },
 ];
 
-const CORES: Record<string, string[]> = {
-  Smartwatches: ["Preto", "Prata", "Rosa"],
-  Premium: ["Preto", "Prata", "Rosa"],
-  Wearzone: ["Preto", "Prata", "Rosa"],
-  "Celulares de pulso": ["Preto", "Prata"],
-  Kits: ["Preto", "Prata", "Rosa"],
-  "Áudio": ["Preto", "Branco"],
-};
-
-function coresDe(p: ProdutoBase): string[] {
-  if (p.nome.startsWith("Pulseira")) return ["Preto", "Prata", "Dourado"];
-  if (p.nome.startsWith("Capinha")) return ["Transparente", "Preto", "Rosa"];
-  return CORES[p.categoria] ?? [];
-}
-
-/** Agrupa itens com o mesmo nome (ex.: tamanhos diferentes) em um único produto. */
 function montar(itens: ProdutoBase[]): Produto[] {
-  const grupos = new Map<string, ProdutoBase[]>();
-  for (const p of itens) {
-    const k = p.nome.toLowerCase();
-    grupos.set(k, [...(grupos.get(k) ?? []), p]);
-  }
-  return Array.from(grupos.values()).map((g, i) => {
-    const p = g[0]!;
+  return itens.map((p, i) => {
     const precoVista = precoFinal(p.base, MARGEM);
-    const imagem = g.map((x) => (x.codigo ? imgMap[x.codigo] : undefined)).find(Boolean) ?? null;
+    const imagem = p.codigo ? imgMap[p.codigo] ?? null : null;
+    const cores = p.codigo && CORES_DISTRIBUIDORA[p.codigo] ? CORES_DISTRIBUIDORA[p.codigo] : [];
     return {
       ...p,
-      id: `p-${p.codigo ?? i}-${i}`,
+      id: `p-${p.codigo ?? i}`,
       imagem,
       precoVista,
       parcela: valorParcela(precoVista),
-      cores: coresDe(p),
-      tamanhos: g.length > 1 ? g.map((x) => x.desc) : [],
+      cores,
+      tamanhos: p.tamanhos ?? [],
     };
   });
 }
 
 export const produtos: Produto[] = montar(catalogo2);
-
 export const categorias: string[] = Array.from(new Set(produtos.map((p) => p.categoria)));
