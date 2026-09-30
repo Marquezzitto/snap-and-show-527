@@ -9,6 +9,7 @@ import { useEstoque } from "@/lib/estoque";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { WhatsAppBubble } from "@/components/site/WhatsAppBubble";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -108,11 +109,12 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
                 const corEsgotada = qtdC !== undefined && qtdC <= 0;
 
                 return (
-                  <button
+                  <Button
                     key={c}
                     type="button"
+                    variant="outline"
                     onClick={() => setCor(c)}
-                    className={`inline-flex items-center gap-1.5 rounded-full border py-1 pl-1 pr-2.5 text-xs font-medium transition-all ${
+                    className={`h-auto min-h-8 gap-1.5 rounded-full py-1 pl-1 pr-2.5 text-xs font-medium transition-all ${
                       ativo
                         ? "border-accent bg-accent/15 text-foreground shadow-sm"
                         : "border-border bg-secondary text-muted-foreground hover:border-accent/50 hover:text-foreground"
@@ -125,7 +127,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
                       {ativo && <span className="text-white">✓</span>}
                     </span>
                     {c}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -161,37 +163,35 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
           <p className="text-xs text-accent">ou {PARCELAS}x de {brl(p.parcela)} no cartão</p>
         </div>
 
-        <button
+        <Button
           type="button"
           disabled={esgotado}
           onClick={() => {
-            add({ id: p.id, cor, tam });
+            add({ id: p.id, cor: cor ?? "", tam: tam ?? "" });
             toast.success(`${p.nome} adicionado ao carrinho`, { action: { label: "Ver carrinho", onClick: () => setOpen(true) } });
           }}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
           <ShoppingBag className="h-4 w-4" /> {esgotado ? "Esgotado" : "Adicionar ao carrinho"}
-        </button>
+        </Button>
       </div>
     </article>
   );
 }
 
 function Vitrine() {
-  const [categoria, setCategoria] = useState("Todas");
   const [busca, setBusca] = useState("");
   const { estoque } = useEstoque();
 
   const lista = useMemo(() => {
     return produtos.filter((p) => {
-      if (categoria !== "Todas" && p.categoria !== categoria) return false;
       if (busca && !`${p.nome} ${p.desc}`.toLowerCase().includes(busca.toLowerCase())) return false;
       return true;
     });
-  }, [categoria, busca]);
+  }, [busca]);
 
   const cats = useMemo(
-    () => ["Todas", ...Array.from(new Set(produtos.map((p) => p.categoria)))],
+    () => Array.from(new Set(produtos.map((p) => p.categoria))),
     [],
   );
 
@@ -219,30 +219,34 @@ function Vitrine() {
       </section>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
-        <div className="mb-6 flex flex-wrap gap-2">
+        <nav aria-label="Categorias" className="mb-8 flex gap-2 overflow-x-auto border-b border-border pb-4">
           {cats.map((c) => (
-            <button
+            <a
               key={c}
-              type="button"
-              onClick={() => setCategoria(c)}
-              className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
-                categoria === c
-                  ? "bg-accent text-accent-foreground"
-                  : "border border-border bg-secondary text-muted-foreground hover:text-foreground"
-              }`}
+              href={`#${c.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-")}`}
+              className="shrink-0 rounded-full border border-border bg-secondary px-3.5 py-1.5 text-xs font-semibold text-foreground transition-colors hover:border-accent"
             >
               {c}
-            </button>
+            </a>
           ))}
-        </div>
+        </nav>
 
         <p className="mb-4 text-xs text-muted-foreground">Exibindo {lista.length} produtos</p>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {lista.map((p) => (
-            <ProdutoCard key={p.id} p={p} estoque={estoque} />
-          ))}
-        </div>
+        {cats.map((c) => {
+          const itens = lista.filter((p) => p.categoria === c);
+          if (!itens.length) return null;
+          return <section key={c} id={c.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-")} className="scroll-mt-28 border-t border-border py-9 first:border-0 first:pt-0">
+            <div className="mb-5 flex items-baseline justify-between gap-3">
+              <h2 className="text-2xl font-bold text-foreground">{c}</h2>
+              <span className="text-xs text-muted-foreground">{itens.length} {itens.length === 1 ? "produto" : "produtos"}</span>
+            </div>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {itens.map((p) => <ProdutoCard key={p.id} p={p} estoque={estoque} />)}
+            </div>
+          </section>;
+        })}
+        {lista.length === 0 && <p className="py-10 text-center text-muted-foreground">Nenhum produto encontrado.</p>}
       </main>
 
       <WhatsAppBubble />

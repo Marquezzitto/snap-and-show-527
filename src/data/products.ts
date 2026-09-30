@@ -209,7 +209,7 @@ function montar(itens: ProdutoBase[]): Produto[] {
   return itens.map((p, i) => {
     const precoVista = precoFinal(p.base, MARGEM);
     const imagem = p.codigo ? imgMap[p.codigo] ?? null : null;
-    const cores = p.codigo && CORES_DISTRIBUIDORA[p.codigo] ? CORES_DISTRIBUIDORA[p.codigo] : [];
+    const cores = p.codigo ? (CORES_DISTRIBUIDORA[p.codigo] ?? p.cores ?? []) : (p.cores ?? []);
     return {
       ...p,
       id: `p-${p.codigo ?? i}`,
