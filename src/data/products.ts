@@ -205,22 +205,77 @@ const catalogo2: ProdutoBase[] = [
   { nome: "Pulseira listrada pino", desc: "20mm/22mm", codigo: "0432", base: 2, categoria: "Acessórios", catalogo: 2, tamanhos: ["20mm", "22mm"] },
 ];
 
+/** Itens conferidos com a API da distribuidora; bases no PDF enviado (0 = consultar). */
+const catalogoComplementar: ProdutoBase[] = [
+  { nome: "Pulseira Alpina 38mm/40mm/41mm", desc: "Modelo da distribuidora · cód. 0016", codigo: "0016", base: 7, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira de Couro Magnética Dobrável de Pino 22mm", desc: "Modelo da distribuidora · cód. 0091", codigo: "0091", base: 12, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira de Couro Microfibra 42mm/44mm/45mm/47mm/49mm", desc: "Modelo da distribuidora · cód. 0047", codigo: "0047", base: 25, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Elo Magnético Link 38mm/41mm/42mm/49mm", desc: "Modelo da distribuidora · cód. 0438", codigo: "0438", base: 13, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Elo Magnético Link Pino 22mm", desc: "Modelo da distribuidora · cód. 0439", codigo: "0439", base: 15, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Milanesa de Pino 22mm", desc: "Modelo da distribuidora · cód. 0033", codigo: "0033", base: 10, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Nike de Pino 22mm", desc: "Modelo da distribuidora · cód. 0079", codigo: "0079", base: 6, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Nylon Strap 42mm/44mm/45mm/46mm/49mm", desc: "Modelo da distribuidora · cód. 0424", codigo: "0424", base: 22, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Oceana 38mm/40mm/41mm", desc: "Modelo da distribuidora · cód. 0009", codigo: "0009", base: 4.5, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Oceana 42mm/44mm/45mm/47mm/49mm", desc: "Modelo da distribuidora · cód. 0005", codigo: "0005", base: 4.5, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Oceana de Pino 22mm", desc: "Modelo da distribuidora · cód. 0053", codigo: "0053", base: 7, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Oceana Sport 38mm/40mm/41mm", desc: "Modelo da distribuidora · cód. 0087", codigo: "0087", base: 7, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Oceana Sport 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0074", codigo: "0074", base: 7, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Oceana Sport de Pino 22mm", desc: "Modelo da distribuidora · cód. 0080", codigo: "0080", base: 9, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone 38mm/40mm/41mm", desc: "Modelo da distribuidora · cód. 0002", codigo: "0002", base: 4, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0001", codigo: "0001", base: 4, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone de Pino 22mm", desc: "Modelo da distribuidora · cód. 0031", codigo: "0031", base: 6, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone e Nylon de Pino 22mm", desc: "Modelo da distribuidora · cód. 0093", codigo: "0093", base: 12, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone Elo Magnético Ocean 38mm/40mm/41mm", desc: "Modelo da distribuidora · cód. 0069", codigo: "0069", base: 28, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone Elo Magnético Ocean 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0059", codigo: "0059", base: 28, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone Magnético dobrável 38mm/41mm/42mm/49mm", desc: "Modelo da distribuidora · cód. 0440", codigo: "0440", base: 4, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone Robot Titanium 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0058", codigo: "0058", base: 30, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone Social 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0020", codigo: "0020", base: 3.5, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone Sport Classic 38mm/41mm/42mm/49mm", desc: "Modelo da distribuidora · cód. 0436", codigo: "0436", base: 5.5, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Silicone Weave 38mm/41mm/42mm/49mm", desc: "Modelo da distribuidora · cód. 0437", codigo: "0437", base: 4, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport de Pino 22mm", desc: "Modelo da distribuidora · cód. 0081", codigo: "0081", base: 6, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport de Pino microtexturizada 20mm/22mm", desc: "Modelo da distribuidora · cód. 0404", codigo: "0404", base: 5, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Duo 38mm/41mm/42mm/49mm", desc: "Modelo da distribuidora · cód. 0435", codigo: "0435", base: 8, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Line 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0405", codigo: "0405", base: 6, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport microtexturizada 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0406", codigo: "0406", base: 6, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Vent 22mm", desc: "Modelo da distribuidora · cód. 0416", codigo: "0416", base: 9, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Vent 44mm (Watch 7)", desc: "Modelo da distribuidora · cód. 0419", codigo: "0419", base: 10, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Wave Lisa 38mm/40mm/41mm", desc: "Modelo da distribuidora · cód. 0423", codigo: "0423", base: 10, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Wave Lisa 40mm  (Watch 8)", desc: "Modelo da distribuidora · cód. 0420", codigo: "0420", base: 11, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Wave Lisa 42mm/44mm/45mm/46mm/49mm", desc: "Modelo da distribuidora · cód. 0422", codigo: "0422", base: 10, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Wave Lisa pino 22mm", desc: "Modelo da distribuidora · cód. 0410", codigo: "0410", base: 10, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport Wave pino 22mm", desc: "Modelo da distribuidora · cód. 0402", codigo: "0402", base: 8, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira SportX 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0433", codigo: "0433", base: 9, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira TRAIL LOOP 38mm/40mm/41mm", desc: "Modelo da distribuidora · cód. 0018", codigo: "0018", base: 7, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Trail Loop 42mm/44mm/45mm/47mm/49mm", desc: "Modelo da distribuidora · cód. 0006", codigo: "0006", base: 7, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Trail Loop Fecho Preto 42mm/44mm/45mm/47mm/49mm", desc: "Modelo da distribuidora · cód. 0421", codigo: "0421", base: 7.5, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Suporte Expositor de Metal", desc: "Modelo da distribuidora · cód. 0400", codigo: "0400", base: 20, categoria: "Expositores", catalogo: 2 },
+  { nome: "Suporte Expositor Wearzone", desc: "Modelo da distribuidora · cód. 0425", codigo: "0425", base: 7, categoria: "Expositores", catalogo: 2 },
+  { nome: "N10 | KIT 3 PULSEIRAS | CUSTO BENEFÍCIO| SERIES 10", desc: "Modelo da distribuidora · cód. 0235", codigo: "0235", base: 0, categoria: "Kits", catalogo: 2 },
+  { nome: "Pulseira Silicone e Nylon 42mm/44mm/45mm/49mm", desc: "Modelo da distribuidora · cód. 0092", codigo: "0092", base: 0, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "Pulseira Sport de Pino 18mm", desc: "Modelo da distribuidora · cód. 0082", codigo: "0082", base: 0, categoria: "Pulseiras", catalogo: 2 },
+  { nome: "SU01 Microwear | 3 ATM e GPS Integrado", desc: "Modelo da distribuidora · cód. 0242", codigo: "0242", base: 0, categoria: "Smartwatches", catalogo: 2 },
+  { nome: "W29 PRO - MICROWEAR| FUNÇÃO DOIS GESTOS, 1G DE MEMÓRIA E CAPINHA DE BRINDE.", desc: "Modelo da distribuidora · cód. 0160", codigo: "0160", base: 0, categoria: "Smartwatches", catalogo: 2 },
+  { nome: "Xv9 Pro - Tela Nível Amoled, Cpu Dual Core E Design Exclusivo", desc: "Modelo da distribuidora · cód. 0154", codigo: "0154", base: 0, categoria: "Smartwatches", catalogo: 2 },
+];
+
 function montar(itens: ProdutoBase[]): Produto[] {
   return itens.map((p, i) => {
-    const precoVista = precoFinal(p.base, MARGEM);
+    const precoVista = p.base > 0 ? precoFinal(p.base, MARGEM) : 0;
     const imagem = p.codigo ? imgMap[p.codigo] ?? null : null;
-    const cores = p.codigo && CORES_DISTRIBUIDORA[p.codigo] ? CORES_DISTRIBUIDORA[p.codigo] : [];
+    const cores = p.codigo ? (CORES_DISTRIBUIDORA[p.codigo] ?? p.cores ?? []) : (p.cores ?? []);
     return {
       ...p,
       id: `p-${p.codigo ?? i}`,
       imagem,
       precoVista,
-      parcela: valorParcela(precoVista),
+      parcela: precoVista > 0 ? valorParcela(precoVista) : 0,
       cores,
       tamanhos: p.tamanhos ?? [],
     };
   });
 }
 
-export const produtos: Produto[] = montar(catalogo2);
+export const produtos: Produto[] = montar([...catalogo2, ...catalogoComplementar]).map((p) =>
+  p.nome.toLowerCase().startsWith("pulseira") ? { ...p, categoria: "Pulseiras" } : p,
+);
 export const categorias: string[] = Array.from(new Set(produtos.map((p) => p.categoria)));
