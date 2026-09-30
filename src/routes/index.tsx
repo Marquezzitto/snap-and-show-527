@@ -8,7 +8,7 @@ import { useCart } from "@/lib/cart";
 import { useEstoque } from "@/lib/estoque";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { WhatsAppBubble } from "@/components/site/WhatsAppBubble";
+import { WhatsAppBubble, WHATSAPP } from "@/components/site/WhatsAppBubble";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
@@ -166,7 +166,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
         </div>
 
         {p.precoVista === 0 ? <a
-          href={`https://wa.me/5511999999999?text=${encodeURIComponent(`Olá! Gostaria de consultar o preço do produto ${p.nome} (cód. ${p.codigo}).`)}`}
+          href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Olá! Gostaria de consultar o preço do produto ${p.nome} (cód. ${p.codigo}).`)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground"
