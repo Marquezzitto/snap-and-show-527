@@ -33,7 +33,7 @@ function Linha({ codigo, nome, imagem, atual, onSalvo }: { codigo: string; nome:
         ? await supabase.from("estoque").delete().eq("codigo", codigo)
         : await supabase.from("estoque").upsert({ codigo, quantidade: Math.max(0, parseInt(valor, 10) || 0), updated_at: new Date().toISOString() });
     setSalvando(false);
-    if (error) return toast.error("Não foi possível salvar");
+    if (error) { toast.error("Não foi possível salvar"); return; }
     toast.success(`Estoque de ${nome} atualizado`);
     onSalvo();
   }
