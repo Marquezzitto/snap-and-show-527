@@ -4,7 +4,14 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { WHATSAPP } from "@/components/site/WhatsAppBubble";
 
 export const Route = createFileRoute("/_authenticated/pedido/$numero")({
-  head: () => ({ meta: [{ title: "Orçamento enviado — Marks Imports" }, { name: "description", content: "Seu orçamento foi recebido." }] }),
+  head: () => ({ meta: [
+    { title: "Orçamento enviado — Marks Imports" },
+    { name: "description", content: "Seu orçamento foi recebido." },
+    { property: "og:title", content: "Orçamento enviado — Marks Imports" },
+    { property: "og:description", content: "Seu orçamento foi recebido." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: Confirmacao,
 });
 

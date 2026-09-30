@@ -10,6 +10,11 @@ export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
       { title: "Administração de estoque — Marks Imports" },
+      { name: "description", content: "Gerencie o estoque dos produtos Marks Imports por cor." },
+      { property: "og:title", content: "Administração de estoque — Marks Imports" },
+      { property: "og:description", content: "Gerencie o estoque dos produtos Marks Imports por cor." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),

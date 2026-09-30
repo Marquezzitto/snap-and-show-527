@@ -9,7 +9,14 @@ import { carregarPerfil, perfilCompleto, type Perfil } from "@/lib/perfil";
 import { calcularFrete, criarPedido } from "@/lib/pedido.functions";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
-  head: () => ({ meta: [{ title: "Finalizar pedido — Marks Imports" }, { name: "description", content: "Revise seus itens e finalize o orçamento." }] }),
+  head: () => ({ meta: [
+    { title: "Finalizar pedido — Marks Imports" },
+    { name: "description", content: "Revise seus itens e finalize o orçamento." },
+    { property: "og:title", content: "Finalizar pedido — Marks Imports" },
+    { property: "og:description", content: "Revise seus itens e finalize o orçamento." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: Checkout,
 });
 
