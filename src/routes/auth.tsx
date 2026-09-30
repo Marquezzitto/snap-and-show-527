@@ -40,10 +40,20 @@ function AuthPage() {
   async function google() {
     setCarregando(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/auth`,
-      });
-      if (result.error) toast.error(`Não foi possível entrar com Google: ${result.error.message}`);
+      // The managed OAuth broker is served only by Lovable-hosted domains.
+      // External hosting uses its own Google credentials in Lovable Cloud.
+      if (window.location.hostname.endsWith(".lovable.app")) {
+        const result = await lovable.auth.signInWithOAuth("google", {
+          redirect_uri: `${window.location.origin}/auth`,
+        });
+        if (result.error) toast.error(`Não foi possível entrar com Google: ${result.error.message}`);
+      } else {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: { redirectTo: `${window.location.origin}/auth` },
+        });
+        if (error) toast.error(`Não foi possível entrar com Google: ${error.message}`);
+      }
     } catch {
       toast.error("Não foi possível entrar com Google. Tente novamente ou use seu e-mail e senha.");
     } finally {
