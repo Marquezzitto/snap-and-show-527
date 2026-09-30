@@ -165,17 +165,22 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
           </> : <p className="text-base font-bold text-foreground">Preço sob consulta</p>}
         </div>
 
-        <Button
+        {p.precoVista === 0 ? <a
+          href={`https://wa.me/5511999999999?text=${encodeURIComponent(`Olá! Gostaria de consultar o preço do produto ${p.nome} (cód. ${p.codigo}).`)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground"
+        >Consultar preço</a> : <Button
           type="button"
-          disabled={esgotado || p.precoVista === 0}
+          disabled={esgotado}
           onClick={() => {
             add({ id: p.id, cor: cor ?? "", tam: tam ?? "" });
             toast.success(`${p.nome} adicionado ao carrinho`, { action: { label: "Ver carrinho", onClick: () => setOpen(true) } });
           }}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
-          <ShoppingBag className="h-4 w-4" /> {p.precoVista === 0 ? "Consulte o preço" : esgotado ? "Esgotado" : "Adicionar ao carrinho"}
-        </Button>
+          <ShoppingBag className="h-4 w-4" /> {esgotado ? "Esgotado" : "Adicionar ao carrinho"}
+        </Button>}
       </div>
     </article>
   );
