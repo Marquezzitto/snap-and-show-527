@@ -1,28 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { Search, ShoppingBag } from "lucide-react";
+import { toast } from "sonner";
 import { produtos, type Produto } from "@/data/products";
 import { brl, PARCELAS } from "@/lib/pricing";
-import { toast } from "sonner";
-import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/lib/cart";
+import { useEstoque } from "@/lib/estoque";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { useEstoque } from "@/lib/estoque";
+import { WhatsAppBubble } from "@/components/site/WhatsAppBubble";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Marks Imports — Vitrine de Smartwatches, Áudio e Óculos IA" },
-      {
-        name: "description",
-        content:
-          "Vitrine virtual com smartwatches Microwear e Wearzone, fones com ANC, óculos com IA e acessórios. Preços à vista e parcelados em 3x.",
-      },
+      { title: "Marks Imports — Smartwatches, Wearzone e Acessórios" },
+      { name: "description", content: "Catálogo completo Marks Imports. Smartwatches, fones e acessórios em até 3x sem juros ou desconto à vista." },
       { property: "og:title", content: "Marks Imports — Vitrine Oficial" },
-      {
-        property: "og:description",
-        content: "Smartwatches, áudio Wearzone, óculos com IA e acessórios com preço à vista e em 3x.",
-      },
+      { property: "og:description", content: "Smartwatches, fones e acessórios premium com pronta entrega." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -31,72 +25,104 @@ export const Route = createFileRoute("/")({
 });
 
 const COR_SWATCH: Record<string, string> = {
-  Preto: "oklch(0.2 0 0)",
-  Prata: "oklch(0.82 0.01 250)",
-  Rosa: "oklch(0.8 0.08 10)",
-  Dourado: "oklch(0.8 0.12 85)",
-  Branco: "oklch(0.97 0 0)",
-  Transparente: "linear-gradient(135deg, oklch(0.9 0 0 / .3), oklch(0.6 0 0 / .1))",
+  Preto: "#1a1a1a",
+  Branco: "#f5f5f5",
+  Prata: "#c0c0c0",
+  Dourado: "#d4af37",
+  Rosa: "#f472b6",
+  "Rosa Claro": "#fbcfe8",
+  "Rosa Pink": "#db2777",
+  Rosé: "#e0a899",
+  "Rose Gold": "#b76e79",
+  Laranja: "#ea580c",
+  Verde: "#16a34a",
+  "Verde Militar": "#4b5320",
+  "Verde Petróleo": "#005f73",
+  Azul: "#2563eb",
+  "Azul Marinho": "#1e3a8a",
+  Turquesa: "#06b6d4",
+  Cinza: "#64748b",
+  Grafite: "#334155",
+  Marrom: "#78350f",
+  Caramelo: "#c2410c",
+  Café: "#3e2723",
+  Bege: "#d2b48c",
+  Nude: "#e5c29f",
+  Mostarda: "#ca8a04",
+  Lilás: "#c084fc",
+  Roxo: "#7e22ce",
+  Vinho: "#831843",
+  Vermelho: "#dc2626",
+  Amarelo: "#eab308",
+  Starlight: "#f0e6d2",
+  Titanium: "#878681",
 };
 
-function Card({ p, qtd }: { p: Produto; qtd: number | undefined }) {
-  const [cor, setCor] = useState(p.cores[0] ?? "");
-  const [tam, setTam] = useState(p.tamanhos[0] ?? "");
+function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, number> }) {
   const { add, setOpen } = useCart();
+  const [cor, setCor] = useState<string | undefined>(p.cores[0]);
+  const [tam, setTam] = useState<string | undefined>(p.tamanhos[0]);
+
+  // Chave de estoque: "codigo:cor" ou apenas "codigo" se não tiver cor
+  const chaveEstoque = p.codigo ? (cor ? `${p.codigo}:${cor}` : p.codigo) : "";
+  const chaveGeral = p.codigo ?? "";
+  
+  // Prioridade: estoque da cor selecionada; se não definido, usa o geral do produto
+  const qtd = chaveEstoque && estoque[chaveEstoque] !== undefined
+    ? estoque[chaveEstoque]
+    : chaveGeral && estoque[chaveGeral] !== undefined
+    ? estoque[chaveGeral]
+    : undefined;
+
   const esgotado = qtd !== undefined && qtd <= 0;
+
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_0_40px_-12px_var(--glow)]">
-      <div className="relative aspect-4/3 overflow-hidden bg-secondary">
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-accent/40 hover:shadow-xl">
+      <div className="relative aspect-square w-full overflow-hidden bg-secondary">
         {p.imagem ? (
-          <img src={p.imagem} alt={p.nome} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105" />
+          <img src={p.imagem} alt={p.nome} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center px-4 text-center text-xs text-muted-foreground">Foto em breve</div>
+          <div className="flex h-full items-center justify-center text-xs text-muted-foreground">Sem foto</div>
         )}
-        <span className="absolute left-3 top-3 rounded-full bg-background/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-accent backdrop-blur">
+        <span className="absolute left-3 top-3 rounded-full bg-background/80 px-2.5 py-0.5 text-[11px] font-semibold text-accent backdrop-blur">
           {p.categoria}
         </span>
-        {cor && p.cores.length > 1 && (
-          <span
-            key={cor}
-            className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-background/85 px-2.5 py-1 text-[11px] font-semibold text-foreground backdrop-blur animate-in fade-in zoom-in-95 duration-300"
-          >
-            <span style={{ background: COR_SWATCH[cor] }} className="h-3 w-3 rounded-full border border-border" />
-            {cor}
-          </span>
-        )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-5">
+      <div className="flex flex-1 flex-col gap-3 p-4">
         <div>
-          <h3 className="text-base font-semibold leading-tight text-foreground">{p.nome}</h3>
-          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{p.tamanhos.length ? "Escolha o tamanho abaixo" : p.desc}</p>
+          <h3 className="text-base font-bold text-foreground">{p.nome}</h3>
+          <p className="line-clamp-2 text-xs text-muted-foreground">{p.desc}</p>
         </div>
 
-        {p.cores.length > 1 && (
-          <fieldset>
-            <legend className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Escolha a cor
+        {p.cores.length > 0 && (
+          <fieldset className="space-y-1.5">
+            <legend className="text-xs font-medium text-muted-foreground">
+              Cor: <span className="font-semibold text-foreground">{cor ?? "Selecione"}</span>
             </legend>
             <div className="flex flex-wrap gap-1.5">
               {p.cores.map((c) => {
                 const ativo = cor === c;
+                const chaveC = p.codigo ? `${p.codigo}:${c}` : "";
+                const qtdC = chaveC && estoque[chaveC] !== undefined ? estoque[chaveC] : undefined;
+                const corEsgotada = qtdC !== undefined && qtdC <= 0;
+
                 return (
                   <button
                     key={c}
                     type="button"
-                    aria-pressed={ativo}
                     onClick={() => setCor(c)}
-                    className={`inline-flex items-center gap-1.5 rounded-full border py-1 pl-1 pr-2.5 text-xs font-medium transition-all duration-200 active:scale-95 ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border py-1 pl-1 pr-2.5 text-xs font-medium transition-all ${
                       ativo
-                        ? "border-accent bg-accent/15 text-foreground shadow-[0_0_16px_-4px_var(--glow)]"
+                        ? "border-accent bg-accent/15 text-foreground shadow-sm"
                         : "border-border bg-secondary text-muted-foreground hover:border-accent/50 hover:text-foreground"
-                    }`}
+                    } ${corEsgotada ? "opacity-50 line-through" : ""}`}
                   >
                     <span
-                      style={{ background: COR_SWATCH[c] }}
-                      className={`flex h-5 w-5 items-center justify-center rounded-full border border-border text-[10px] font-bold transition-transform ${ativo ? "scale-110" : ""}`}
+                      style={{ background: COR_SWATCH[c] ?? "#555" }}
+                      className={`flex h-4 w-4 items-center justify-center rounded-full border border-border text-[9px] font-bold ${ativo ? "scale-110 ring-1 ring-accent" : ""}`}
                     >
-                      {ativo && <span className="rounded-full bg-background/80 px-1 text-accent">✓</span>}
+                      {ativo && <span className="text-white">✓</span>}
                     </span>
                     {c}
                   </button>
@@ -116,13 +142,25 @@ function Card({ p, qtd }: { p: Produto; qtd: number | undefined }) {
           </select>
         )}
 
-        <div className="mt-auto">
-          <p className="text-xs text-muted-foreground">à vista</p>
-          <p className="text-2xl font-bold tracking-tight text-foreground">{brl(p.precoVista)}</p>
-          <p className="text-xs text-accent">ou {PARCELAS}x de {brl(p.parcela)}</p>
+        {/* Informação visível do estoque para o cliente */}
+        <div className="text-xs">
+          {qtd === undefined ? (
+            <span className="text-muted-foreground">✓ Disponível para envio</span>
+          ) : esgotado ? (
+            <span className="font-bold text-destructive">Esgotado nesta cor</span>
+          ) : qtd <= 5 ? (
+            <span className="font-bold text-accent">Últimas {qtd} unidades em estoque!</span>
+          ) : (
+            <span className="text-muted-foreground">Em estoque: <strong className="text-foreground">{qtd} un.</strong></span>
+          )}
         </div>
 
-        {qtd !== undefined && qtd > 0 && qtd <= 5 && <p className="text-xs font-semibold text-accent">Últimas {qtd} unidades</p>}
+        <div className="mt-auto pt-2">
+          <p className="text-xs text-muted-foreground">à vista</p>
+          <p className="text-2xl font-black text-foreground">{brl(p.precoVista)}</p>
+          <p className="text-xs text-accent">ou {PARCELAS}x de {brl(p.parcela)} no cartão</p>
+        </div>
+
         <button
           type="button"
           disabled={esgotado}
@@ -130,7 +168,7 @@ function Card({ p, qtd }: { p: Produto; qtd: number | undefined }) {
             add({ id: p.id, cor, tam });
             toast.success(`${p.nome} adicionado ao carrinho`, { action: { label: "Ver carrinho", onClick: () => setOpen(true) } });
           }}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
           <ShoppingBag className="h-4 w-4" /> {esgotado ? "Esgotado" : "Adicionar ao carrinho"}
         </button>
@@ -158,44 +196,39 @@ function Vitrine() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      <SiteHeader>
-        <input
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          placeholder="Buscar produto..."
-          className="w-full rounded-xl border border-border bg-secondary px-4 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent md:order-none md:w-64"
-        />
-      </SiteHeader>
+    <div className="min-h-screen bg-background text-foreground">
+      <SiteHeader />
 
-      <section className="border-b border-border bg-gradient-to-b from-secondary/50 to-background">
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:py-24">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-            Curadoria tecnológica
+      <section className="border-b border-border bg-gradient-to-b from-card/60 to-background py-10">
+        <div className="mx-auto max-w-6xl px-4 text-center">
+          <h1 className="text-3xl font-black tracking-tight sm:text-5xl">Catálogo Marks Imports</h1>
+          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
+            Smartwatches, kits, pulseiras e acessórios com frete grátis para todo o Brasil acima de R$ 420.
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
-            Eleve seu pulso.
-            <span className="block bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
-              Atualize seu tempo.
-            </span>
-          </h1>
-          <p className="mt-5 max-w-xl text-sm text-muted-foreground sm:text-base">
-            Smartwatches Microwear e Wearzone, áudio com cancelamento de ruído, óculos com IA e
-            acessórios. Envio para todo o Brasil, parcelamento em até {PARCELAS}x e frete grátis acima de R$ 420.
-          </p>
+          <div className="mx-auto mt-6 flex max-w-md items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 shadow-sm">
+            <Search className="h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Buscar por nome, modelo ou código..."
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              className="w-full bg-transparent text-sm text-foreground outline-none"
+            />
+          </div>
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-5 py-8">
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+      <main className="mx-auto max-w-6xl px-4 py-8">
+        <div className="mb-6 flex flex-wrap gap-2">
           {cats.map((c) => (
             <button
               key={c}
+              type="button"
               onClick={() => setCategoria(c)}
-              className={`rounded-full border px-3 py-1 text-xs transition-colors ${
+              className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
                 categoria === c
-                  ? "border-accent text-accent"
-                  : "border-border text-muted-foreground hover:text-foreground"
+                  ? "bg-accent text-accent-foreground"
+                  : "border border-border bg-secondary text-muted-foreground hover:text-foreground"
               }`}
             >
               {c}
@@ -203,21 +236,16 @@ function Vitrine() {
           ))}
         </div>
 
-        <p className="mt-6 text-xs text-muted-foreground">{lista.length} produtos</p>
+        <p className="mb-4 text-xs text-muted-foreground">Exibindo {lista.length} produtos</p>
 
-        <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {lista.map((p) => (
-            <Card key={p.id} p={p} qtd={p.codigo ? estoque[p.codigo] : undefined} />
+            <ProdutoCard key={p.id} p={p} estoque={estoque} />
           ))}
         </div>
+      </main>
 
-        {lista.length === 0 && (
-          <p className="py-20 text-center text-sm text-muted-foreground">
-            Nenhum produto encontrado.
-          </p>
-        )}
-      </div>
-
+      <WhatsAppBubble />
       <SiteFooter />
     </div>
   );
