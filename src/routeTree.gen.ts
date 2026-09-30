@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as AuthenticatedContaRouteImport } from './routes/_authenticated/conta'
 import { Route as AuthenticatedPedidoNumeroRouteImport } from './routes/_authenticated/pedido.$numero'
@@ -36,6 +37,11 @@ const ContatoRoute = ContatoRouteImport.update({
   path: '/contato',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCheckoutRoute = AuthenticatedCheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contato': typeof ContatoRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/conta': typeof AuthenticatedContaRoute
   '/pedido/$numero': typeof AuthenticatedPedidoNumeroRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/contato': typeof ContatoRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/conta': typeof AuthenticatedContaRoute
   '/pedido/$numero': typeof AuthenticatedPedidoNumeroRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/contato': typeof ContatoRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/_authenticated/conta': typeof AuthenticatedContaRoute
   '/_authenticated/pedido/$numero': typeof AuthenticatedPedidoNumeroRoute
@@ -82,15 +91,29 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/contato' | '/checkout' | '/conta' | '/pedido/$numero'
+    | '/'
+    | '/auth'
+    | '/contato'
+    | '/admin'
+    | '/checkout'
+    | '/conta'
+    | '/pedido/$numero'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/contato' | '/checkout' | '/conta' | '/pedido/$numero'
+  to:
+    | '/'
+    | '/auth'
+    | '/contato'
+    | '/admin'
+    | '/checkout'
+    | '/conta'
+    | '/pedido/$numero'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/contato'
+    | '/_authenticated/admin'
     | '/_authenticated/checkout'
     | '/_authenticated/conta'
     | '/_authenticated/pedido/$numero'
@@ -133,6 +156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContatoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/checkout': {
       id: '/_authenticated/checkout'
       path: '/checkout'
@@ -158,12 +188,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedCheckoutRoute: typeof AuthenticatedCheckoutRoute
   AuthenticatedContaRoute: typeof AuthenticatedContaRoute
   AuthenticatedPedidoNumeroRoute: typeof AuthenticatedPedidoNumeroRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedCheckoutRoute: AuthenticatedCheckoutRoute,
   AuthenticatedContaRoute: AuthenticatedContaRoute,
   AuthenticatedPedidoNumeroRoute: AuthenticatedPedidoNumeroRoute,
