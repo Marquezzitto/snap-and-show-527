@@ -4,10 +4,12 @@ import logo from "@/assets/marks-logo.png.asset.json";
 import { useCart, FRETE_GRATIS_MIN } from "@/lib/cart";
 import { useAuth } from "@/hooks/use-auth";
 import { brl } from "@/lib/pricing";
+import { useIsAdmin } from "@/lib/estoque";
 
 export function SiteHeader({ children }: { children?: React.ReactNode }) {
   const { count, setOpen } = useCart();
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   return (
     <>
       <div className="bg-accent px-4 py-1.5 text-center text-xs font-semibold text-accent-foreground">
@@ -30,6 +32,11 @@ export function SiteHeader({ children }: { children?: React.ReactNode }) {
             <Link to="/contato" className="rounded-lg px-3 py-2 text-muted-foreground hover:text-foreground" activeProps={{ className: "text-foreground" }}>
               Fale Conosco
             </Link>
+            {isAdmin && (
+              <Link to="/admin" className="rounded-lg px-3 py-2 font-semibold text-accent hover:text-foreground">
+                Estoque
+              </Link>
+            )}
             <Link to={user ? "/conta" : "/auth"} className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-muted-foreground hover:text-foreground">
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">{user ? "Minha conta" : "Entrar"}</span>
