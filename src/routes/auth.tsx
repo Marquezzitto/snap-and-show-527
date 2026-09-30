@@ -40,10 +40,19 @@ function AuthPage() {
   async function google() {
     setCarregando(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/auth`,
+      if (window.self !== window.top) {
+        const result = await lovable.auth.signInWithOAuth("google", {
+          redirect_uri: `${window.location.origin}/auth`,
+        });
+        if (result.error) toast.error(`Não foi possível entrar com Google: ${result.error.message}`);
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: `${window.location.origin}/auth` },
       });
-      if (result.error) toast.error(`Não foi possível entrar com Google: ${result.error.message}`);
+      if (error) toast.error(`Não foi possível entrar com Google: ${error.message}`);
     } catch {
       toast.error("Não foi possível entrar com Google. Tente novamente ou use seu e-mail e senha.");
     } finally {
