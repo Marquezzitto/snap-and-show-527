@@ -147,7 +147,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
         {/* Informação visível do estoque para o cliente */}
         <div className="text-xs">
           {qtd === undefined ? (
-            <span className="text-muted-foreground">✓ Disponível para envio</span>
+            <span className="text-muted-foreground">Estoque sob consulta</span>
           ) : esgotado ? (
             <span className="font-bold text-destructive">Esgotado nesta cor</span>
           ) : qtd <= 5 ? (
@@ -158,21 +158,23 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
         </div>
 
         <div className="mt-auto pt-2">
-          <p className="text-xs text-muted-foreground">à vista</p>
-          <p className="text-2xl font-black text-foreground">{brl(p.precoVista)}</p>
-          <p className="text-xs text-accent">ou {PARCELAS}x de {brl(p.parcela)} no cartão</p>
+          {p.precoVista > 0 ? <>
+            <p className="text-xs text-muted-foreground">à vista</p>
+            <p className="text-2xl font-black text-foreground">{brl(p.precoVista)}</p>
+            <p className="text-xs text-accent">ou {PARCELAS}x de {brl(p.parcela)} no cartão</p>
+          </> : <p className="text-base font-bold text-foreground">Preço sob consulta</p>}
         </div>
 
         <Button
           type="button"
-          disabled={esgotado}
+          disabled={esgotado || p.precoVista === 0}
           onClick={() => {
             add({ id: p.id, cor: cor ?? "", tam: tam ?? "" });
             toast.success(`${p.nome} adicionado ao carrinho`, { action: { label: "Ver carrinho", onClick: () => setOpen(true) } });
           }}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
-          <ShoppingBag className="h-4 w-4" /> {esgotado ? "Esgotado" : "Adicionar ao carrinho"}
+          <ShoppingBag className="h-4 w-4" /> {p.precoVista === 0 ? "Consulte o preço" : esgotado ? "Esgotado" : "Adicionar ao carrinho"}
         </Button>
       </div>
     </article>
@@ -185,7 +187,7 @@ function Vitrine() {
 
   const lista = useMemo(() => {
     return produtos.filter((p) => {
-      if (busca && !`${p.nome} ${p.desc}`.toLowerCase().includes(busca.toLowerCase())) return false;
+      if (busca && !`${p.nome} ${p.desc} ${p.codigo ?? ""}`.toLowerCase().includes(busca.toLowerCase())) return false;
       return true;
     });
   }, [busca]);

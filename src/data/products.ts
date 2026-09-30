@@ -260,7 +260,7 @@ const catalogoComplementar: ProdutoBase[] = [
 
 function montar(itens: ProdutoBase[]): Produto[] {
   return itens.map((p, i) => {
-    const precoVista = precoFinal(p.base, MARGEM);
+    const precoVista = p.base > 0 ? precoFinal(p.base, MARGEM) : 0;
     const imagem = p.codigo ? imgMap[p.codigo] ?? null : null;
     const cores = p.codigo ? (CORES_DISTRIBUIDORA[p.codigo] ?? p.cores ?? []) : (p.cores ?? []);
     return {
@@ -268,12 +268,14 @@ function montar(itens: ProdutoBase[]): Produto[] {
       id: `p-${p.codigo ?? i}`,
       imagem,
       precoVista,
-      parcela: valorParcela(precoVista),
+      parcela: precoVista > 0 ? valorParcela(precoVista) : 0,
       cores,
       tamanhos: p.tamanhos ?? [],
     };
   });
 }
 
-export const produtos: Produto[] = montar([...catalogo2, ...catalogoComplementar]);
+export const produtos: Produto[] = montar([...catalogo2, ...catalogoComplementar]).map((p) =>
+  p.nome.toLowerCase().startsWith("pulseira") ? { ...p, categoria: "Pulseiras" } : p,
+);
 export const categorias: string[] = Array.from(new Set(produtos.map((p) => p.categoria)));
