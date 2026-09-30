@@ -9,7 +9,14 @@ import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/pricing";
 
 export const Route = createFileRoute("/_authenticated/conta")({
-  head: () => ({ meta: [{ title: "Minha conta — Marks Imports" }, { name: "description", content: "Seu cadastro e seus pedidos na Marks Imports." }] }),
+  head: () => ({ meta: [
+    { title: "Minha conta — Marks Imports" },
+    { name: "description", content: "Seu cadastro e seus pedidos na Marks Imports." },
+    { property: "og:title", content: "Minha conta — Marks Imports" },
+    { property: "og:description", content: "Seu cadastro e seus pedidos na Marks Imports." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: Conta,
 });
 
