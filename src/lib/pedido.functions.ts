@@ -8,12 +8,17 @@ import { enviarEmailLoja, esc } from "./email.server";
 
 const FRETE_GRATIS_MIN = 420;
 
+const tamanhoOpcional = z.preprocess(
+  (valor) => (typeof valor === "string" ? valor : ""),
+  z.string().max(120),
+);
+
 const itensSchema = z
   .array(
     z.object({
       id: z.string().max(60),
       cor: z.string().max(40),
-      tam: z.string().max(120).optional().default(""),
+      tam: tamanhoOpcional,
       qtd: z.number().int().min(1).max(50),
     }),
   )
