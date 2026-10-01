@@ -2,10 +2,15 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+const tamanhoOpcional = z.preprocess(
+  (valor) => (typeof valor === "string" ? valor : ""),
+  z.string().max(120),
+);
+
 const itemSchema = z.object({
   id: z.string().max(60),
   cor: z.string().max(80).optional().default(""),
-  tam: z.string().max(120).optional().default(""),
+  tam: tamanhoOpcional,
   qtd: z.number().int().min(1).max(50),
 });
 
