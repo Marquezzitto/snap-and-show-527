@@ -7,3 +7,5 @@
 - [ ] Validar Google no domínio externo — bloqueado até cadastrar Client ID e Client Secret próprios do Google nas configurações de autenticação da Lovable Cloud.
 
 - [ ] Verificar o domínio e a conexão Resend mostrados nas capturas; ativar aviso de pedido usando a conexão segura.
+
+- [ ] Vincular a chave completa do Resend pela conexão segura; a captura exibe apenas uma parte.
