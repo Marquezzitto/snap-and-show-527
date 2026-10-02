@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Search, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { produtos, type Produto } from "@/data/products";
-import { watchPhotos } from "@/data/watchPhotos";
+import { getProductPhotos } from "@/data/productPhotos";
 import { brl, PARCELAS } from "@/lib/pricing";
 import { useCart } from "@/lib/cart";
 import { useEstoque } from "@/lib/estoque";
@@ -64,6 +64,8 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
   const { add, setOpen } = useCart();
   const [cor, setCor] = useState<string | undefined>(p.cores[0]);
   const [tam, setTam] = useState<string | undefined>(p.tamanhos[0]);
+  const { gallery, colors: fotosPorCor } = getProductPhotos(p);
+  const imagemAtual = (cor && fotosPorCor[cor]) || gallery[0];
 
   // Chave de estoque: "codigo:cor" ou apenas "codigo" se não tiver cor
   const chaveEstoque = p.codigo ? (cor ? `${p.codigo}:${cor}` : p.codigo) : "";
@@ -81,8 +83,8 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-accent/40 hover:shadow-xl">
       <Link to="/produto/$productId" params={{ productId: p.id }} className="relative block aspect-square w-full overflow-hidden bg-secondary" aria-label={`Ver detalhes de ${p.nome}`}>
-        {(watchPhotos[p.codigo ?? ""]?.[0] ?? p.imagem) ? (
-          <img src={watchPhotos[p.codigo ?? ""]?.[0] ?? p.imagem ?? ""} alt={p.nome} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
+        {imagemAtual ? (
+          <img src={imagemAtual} alt={`${p.nome}${cor ? ` — ${cor}` : ""}`} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
         ) : (
           <div className="flex h-full items-center justify-center text-xs text-muted-foreground">Sem foto</div>
         )}
@@ -127,6 +129,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
                     >
                       {ativo && <span className="text-white">✓</span>}
                     </span>
+                    {fotosPorCor[c] && <img src={fotosPorCor[c]} alt="" loading="lazy" className="h-6 w-6 shrink-0 rounded-sm bg-card object-contain" />}
                     {c}
                   </Button>
                 );

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { produtos } from "@/data/products";
-import { watchPhotos } from "@/data/watchPhotos";
+import { getProductPhotos } from "@/data/productPhotos";
 import { brl, PARCELAS } from "@/lib/pricing";
 import { useCart } from "@/lib/cart";
 import { useEstoque } from "@/lib/estoque";
@@ -31,14 +31,14 @@ export const Route = createFileRoute("/produto/$productId")({
 
 function ProdutoPagina() {
   const p = Route.useLoaderData();
-  const fotos = watchPhotos[p.codigo ?? ""] ?? (p.imagem ? [p.imagem] : []);
+  const { gallery: fotos, colors: fotosPorCor } = getProductPhotos(p);
   const [foto, setFoto] = useState(0);
   const [cor, setCor] = useState(p.cores[0] ?? "");
   const [tam, setTam] = useState(p.tamanhos[0] ?? "");
   const [quantidade, setQuantidade] = useState(1);
   const { estoque } = useEstoque();
   const { add, setOpen } = useCart();
-  useEffect(() => { setFoto(0); setCor(p.cores[0] ?? ""); setTam(p.tamanhos[0] ?? ""); setQuantidade(1); }, [p.id]);
+  useEffect(() => { const imagemInicial = fotosPorCor[p.cores[0] ?? ""]; setFoto(imagemInicial ? Math.max(0, fotos.indexOf(imagemInicial)) : 0); setCor(p.cores[0] ?? ""); setTam(p.tamanhos[0] ?? ""); setQuantidade(1); }, [p.id]);
   const geral = p.codigo ? estoque[p.codigo] : undefined;
   const qtd = p.codigo && cor && estoque[`${p.codigo}:${cor}`] !== undefined ? estoque[`${p.codigo}:${cor}`] : geral;
   const esgotado = qtd !== undefined && qtd <= 0;
@@ -72,7 +72,8 @@ function ProdutoPagina() {
           </div>
           {p.cores.length > 0 && <fieldset className="mt-6"><legend className="mb-2 text-sm font-semibold">Cor: {cor}</legend><div className="flex flex-wrap gap-2">{p.cores.map((c) => {
             const disponivel = p.codigo ? estoque[`${p.codigo}:${c}`] : undefined;
-            return <Button key={c} type="button" variant={cor === c ? "default" : "outline"} onClick={() => { setCor(c); setQuantidade(1); }} className={disponivel === 0 ? "opacity-60 line-through" : ""}>{c}{disponivel !== undefined && ` · ${disponivel} un.`}</Button>;
+             const imagemCor = fotosPorCor[c];
+             return <Button key={c} type="button" variant={cor === c ? "default" : "outline"} onClick={() => { setCor(c); setQuantidade(1); setFoto(imagemCor ? Math.max(0, fotos.indexOf(imagemCor)) : 0); }} className={`h-auto min-h-12 gap-2 px-2 ${disponivel === 0 ? "opacity-60 line-through" : ""}`}>{imagemCor && <img src={imagemCor} alt="" loading="lazy" className="h-9 w-9 shrink-0 rounded-sm bg-card object-contain" />}<span>{c}{disponivel !== undefined && ` · ${disponivel} un.`}</span></Button>;
           })}</div></fieldset>}
           {p.tamanhos.length > 1 && <div className="mt-6"><label htmlFor="tamanho" className="mb-2 block text-sm font-semibold">Tamanho</label><select id="tamanho" value={tam} onChange={(e) => setTam(e.target.value)} className="w-full rounded-md border border-border bg-secondary px-3 py-2 text-foreground">{p.tamanhos.map((t) => <option key={t} value={t}>{t}</option>)}</select></div>}
           <p className={`mt-6 text-sm ${esgotado ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{qtd === undefined ? "Estoque sob consulta" : esgotado ? "Esgotado nesta cor" : `Em estoque: ${qtd} ${qtd === 1 ? "unidade" : "unidades"}`}</p>

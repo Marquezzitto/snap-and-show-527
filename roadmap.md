@@ -9,6 +9,7 @@
 - [x] Verificar o domínio e a conexão Resend mostrados nas capturas; ativar aviso de pedido usando a conexão segura.
 
 - [x] Confirmar o vínculo seguro do Resend; o envio de teste foi aceito sem precisar copiar a chave abreviada da captura.
+- [x] Ampliar as galerias com fotos correspondentes do Drive e trocar a imagem ao selecionar uma cor com foto identificada.
 
 - [x] Explicar que a chave abreviada não pode ser recuperada pela captura e que a conexão atual já envia.
 
