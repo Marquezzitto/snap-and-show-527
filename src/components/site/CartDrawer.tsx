@@ -3,8 +3,12 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCart, FRETE_GRATIS_MIN } from "@/lib/cart";
 import { brl } from "@/lib/pricing";
+import { useCatalog } from "@/lib/catalog";
+import { getProductPhotos } from "@/data/productPhotos";
+import { CatalogImage } from "./CatalogImage";
 
 export function CartDrawer() {
+  const { overrides } = useCatalog();
   const { open, setOpen, lines, subtotal, setQtd, remove } = useCart();
   const navigate = useNavigate();
   const falta = Math.max(0, FRETE_GRATIS_MIN - subtotal);
@@ -36,7 +40,7 @@ export function CartDrawer() {
           {lines.length === 0 && <p className="py-16 text-center text-sm text-muted-foreground">Seu carrinho está vazio.</p>}
           {lines.map((l) => (
             <div key={l.key} className="flex gap-3 rounded-xl border border-border bg-card p-3">
-              <img src={l.produto.imagem ?? ""} alt={l.produto.nome} className="h-16 w-16 rounded-lg bg-secondary object-contain p-1" />
+              <CatalogImage src={getProductPhotos(l.produto, overrides[l.id]).colors[l.cor] ?? getProductPhotos(l.produto, overrides[l.id]).gallery[0]} alt={l.produto.nome} className="h-16 w-16 rounded-lg bg-secondary object-contain p-1" />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-foreground">{l.produto.nome}</p>
                 <p className="truncate text-[11px] text-muted-foreground">{[l.cor, l.tam].filter(Boolean).join(" • ")}</p>

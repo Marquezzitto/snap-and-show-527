@@ -35,8 +35,16 @@ function ProdutoPagina() {
   const original = Route.useLoaderData();
   const { products, overrides } = useCatalog();
   const p = products.find((item) => item.id === original.id);
-  if (!p) return <div className="min-h-screen bg-background text-foreground"><SiteHeader /><main className="mx-auto max-w-3xl px-4 py-16 text-center"><h1 className="text-2xl font-bold">Produto indisponível</h1><p className="mt-3 text-muted-foreground">Este produto não está disponível no momento.</p><Link to="/" className="mt-5 inline-block text-accent underline">Voltar à loja</Link></main></div>;
-  const { gallery: fotos, colors: fotosPorCor } = getProductPhotos(p, overrides[p.id]);
+  if (!p) return <UnavailableProduct />;
+  return <AvailableProduct p={p} override={overrides[p.id]} />;
+}
+
+function UnavailableProduct() {
+  return <div className="min-h-screen bg-background text-foreground"><SiteHeader /><main className="mx-auto max-w-3xl px-4 py-16 text-center"><h1 className="text-2xl font-bold">Produto indisponível</h1><p className="mt-3 text-muted-foreground">Este produto não está disponível no momento.</p><Link to="/" className="mt-5 inline-block text-accent underline">Voltar à loja</Link></main></div>;
+}
+
+function AvailableProduct({ p, override }: { p: typeof produtos[number]; override?: import("@/lib/catalog").ProductOverride }) {
+  const { gallery: fotos, colors: fotosPorCor } = getProductPhotos(p, override);
   const [foto, setFoto] = useState(0);
   const [cor, setCor] = useState(p.cores[0] ?? "");
   const [tam, setTam] = useState(p.tamanhos[0] ?? "");
