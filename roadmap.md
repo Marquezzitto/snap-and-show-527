@@ -9,3 +9,5 @@
 - [ ] Verificar o domínio e a conexão Resend mostrados nas capturas; ativar aviso de pedido usando a conexão segura.
 
 - [ ] Vincular a chave completa do Resend pela conexão segura; a captura exibe apenas uma parte.
+
+- [ ] Orientar criação de uma nova chave no Resend; a chave antiga aparece abreviada e não pode ser recuperada pela captura.
