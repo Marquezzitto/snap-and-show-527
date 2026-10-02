@@ -1,15 +1,15 @@
 # Entregas desta atualização
 
-- [ ] Abrir cada produto em página própria, com seleção de opções, estoque e compra.
-- [ ] Incorporar fotos verificadas da pasta compartilhada aos relógios correspondentes, mantendo foto da distribuidora nos demais.
-- [ ] Corrigir aviso de envio de e-mail: não confirmar notificação que falhou; configurar envio quando o domínio estiver pronto.
-- [ ] Validar páginas e fluxo de compra nos tamanhos de tela principais.
+- [x] Abrir cada produto em página própria, com seleção de opções, estoque e compra.
+- [x] Incorporar fotos verificadas da pasta compartilhada aos relógios correspondentes, mantendo foto da distribuidora nos demais.
+- [x] Corrigir aviso de envio de e-mail: não confirmar notificação que falhou; configurar envio quando o domínio estiver pronto.
+- [ ] Validar a finalização de um pedido real nos tamanhos de tela principais — depende de um pedido de teste autorizado; abertura, seleção e carrinho já foram testados em desktop e celular.
 - [ ] Validar Google no domínio externo — bloqueado até cadastrar Client ID e Client Secret próprios do Google nas configurações de autenticação da Lovable Cloud.
 
-- [ ] Verificar o domínio e a conexão Resend mostrados nas capturas; ativar aviso de pedido usando a conexão segura.
+- [x] Verificar o domínio e a conexão Resend mostrados nas capturas; ativar aviso de pedido usando a conexão segura.
 
-- [ ] Vincular a chave completa do Resend pela conexão segura; a captura exibe apenas uma parte.
+- [x] Confirmar o vínculo seguro do Resend; o envio de teste foi aceito sem precisar copiar a chave abreviada da captura.
 
-- [ ] Orientar criação de uma nova chave no Resend; a chave antiga aparece abreviada e não pode ser recuperada pela captura.
+- [x] Explicar que a chave abreviada não pode ser recuperada pela captura e que a conexão atual já envia.
 
-- [ ] Depois de testar a nova chave Resend, a chave antiga sem uso pode ser excluída no painel do serviço.
+- [ ] Identificar com segurança qual chave está ligada à conexão antes de excluir qualquer chave do Resend — não apagar a chave antiga apenas pelo contador de usos da captura.

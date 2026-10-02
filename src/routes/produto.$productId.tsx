@@ -31,7 +31,7 @@ export const Route = createFileRoute("/produto/$productId")({
 
 function ProdutoPagina() {
   const p = Route.useLoaderData();
-  const fotos = watchPhotos[p.codigo ?? ""]?.length ? watchPhotos[p.codigo ?? ""] : (p.imagem ? [p.imagem] : []);
+  const fotos = watchPhotos[p.codigo ?? ""] ?? (p.imagem ? [p.imagem] : []);
   const [foto, setFoto] = useState(0);
   const [cor, setCor] = useState(p.cores[0] ?? "");
   const [tam, setTam] = useState(p.tamanhos[0] ?? "");
@@ -60,7 +60,7 @@ function ProdutoPagina() {
             </>}
           </div>
           {fotos.length > 1 && <div className="mt-3 flex gap-2 overflow-x-auto pb-2" aria-label="Miniaturas das fotos">
-            {fotos.map((src, index) => <button key={src} type="button" onClick={() => setFoto(index)} aria-label={`Ver foto ${index + 1}`} aria-pressed={foto === index} className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-card ${foto === index ? "border-accent" : "border-border"}`}><img src={src} alt="" loading="lazy" className="h-full w-full object-contain p-1" /></button>)}
+            {fotos.map((src, index) => <Button key={`${src}-${index}`} type="button" size="icon" variant="ghost" onClick={() => setFoto(index)} aria-label={`Ver foto ${index + 1}`} aria-pressed={foto === index} className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-card p-0 ${foto === index ? "border-accent" : "border-border"}`}><img src={src} alt="" loading="lazy" className="h-full w-full object-contain p-1" /></Button>)}
           </div>}
         </section>
         <section>

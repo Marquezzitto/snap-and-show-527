@@ -131,8 +131,9 @@ export const criarPedido = createServerFn({ method: "POST" })
       throw new Error("Carrinho vazio");
     }
 
-    // Verifica estoque. Produtos sem registro não têm controle.
+    // O estoque pode ser geral ou separado por cor; produto sem registro não é limitado.
     const pedidoPorCodigo = new Map<string, number>();
+    const pedidoPorCor = new Map<string, number>();
 
     for (const l of linhas) {
       if (l.codigo) {
@@ -140,18 +141,25 @@ export const criarPedido = createServerFn({ method: "POST" })
           l.codigo,
           (pedidoPorCodigo.get(l.codigo) ?? 0) + l.qtd,
         );
+        if (l.cor) {
+          const chave = `${l.codigo}:${l.cor}`;
+          pedidoPorCor.set(chave, (pedidoPorCor.get(chave) ?? 0) + l.qtd);
+        }
       }
     }
 
-    const { data: est } = await context.supabase
-      .from("estoque")
-      .select("codigo, quantidade")
-      .in("codigo", [...pedidoPorCodigo.keys()]);
+    const chaves = [...new Set([...pedidoPorCodigo.keys(), ...pedidoPorCor.keys()])];
+    const { data: est, error: erroEstoque } = chaves.length
+      ? await context.supabase.from("estoque").select("codigo, quantidade").in("codigo", chaves)
+      : { data: [], error: null };
+    if (erroEstoque) throw new Error("Não foi possível conferir o estoque. Tente novamente.");
+    const codigosComCor = new Set((est ?? []).filter((e) => pedidoPorCor.has(e.codigo)).map((e) => e.codigo.split(":")[0]));
 
     for (const e of est ?? []) {
-      if ((pedidoPorCodigo.get(e.codigo) ?? 0) > e.quantidade) {
+      const necessario = pedidoPorCor.get(e.codigo) ?? (codigosComCor.has(e.codigo) ? 0 : pedidoPorCodigo.get(e.codigo) ?? 0);
+      if (necessario > e.quantidade) {
         const nome =
-          linhas.find((l) => l.codigo === e.codigo)?.nome ?? e.codigo;
+          linhas.find((l) => e.codigo === l.codigo || e.codigo === `${l.codigo}:${l.cor}`)?.nome ?? e.codigo;
 
         throw new Error(
           e.quantidade > 0
@@ -222,9 +230,11 @@ export const criarPedido = createServerFn({ method: "POST" })
     }
 
     for (const e of est ?? []) {
+      const reservado = pedidoPorCor.get(e.codigo) ?? (codigosComCor.has(e.codigo) ? 0 : pedidoPorCodigo.get(e.codigo) ?? 0);
+      if (!reservado) continue;
       const nova = Math.max(
         0,
-        e.quantidade - (pedidoPorCodigo.get(e.codigo) ?? 0),
+        e.quantidade - reservado,
       );
 
       await supabaseAdmin
