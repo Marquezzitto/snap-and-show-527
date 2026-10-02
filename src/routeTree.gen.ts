@@ -16,6 +16,7 @@ import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as AuthenticatedContaRouteImport } from './routes/_authenticated/conta'
+import { Route as ProdutoProductIdRouteImport } from './routes/produto.$productId'
 import { Route as AuthenticatedPedidoNumeroRouteImport } from './routes/_authenticated/pedido.$numero'
 
 const IndexRoute = IndexRouteImport.update({
@@ -52,6 +53,11 @@ const AuthenticatedContaRoute = AuthenticatedContaRouteImport.update({
   path: '/conta',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ProdutoProductIdRoute = ProdutoProductIdRouteImport.update({
+  id: '/produto/$productId',
+  path: '/produto/$productId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedPedidoNumeroRoute =
   AuthenticatedPedidoNumeroRouteImport.update({
     id: '/pedido/$numero',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/conta': typeof AuthenticatedContaRoute
+  '/produto/$productId': typeof ProdutoProductIdRoute
   '/pedido/$numero': typeof AuthenticatedPedidoNumeroRoute
 }
 export interface FileRoutesByTo {
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/conta': typeof AuthenticatedContaRoute
+  '/produto/$productId': typeof ProdutoProductIdRoute
   '/pedido/$numero': typeof AuthenticatedPedidoNumeroRoute
 }
 export interface FileRoutesById {
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/_authenticated/conta': typeof AuthenticatedContaRoute
+  '/produto/$productId': typeof ProdutoProductIdRoute
   '/_authenticated/pedido/$numero': typeof AuthenticatedPedidoNumeroRoute
 }
 export interface FileRouteTypes {
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/checkout'
     | '/conta'
+    | '/produto/$productId'
     | '/pedido/$numero'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/checkout'
     | '/conta'
+    | '/produto/$productId'
     | '/pedido/$numero'
   id:
     | '__root__'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/checkout'
     | '/_authenticated/conta'
+    | '/produto/$productId'
     | '/_authenticated/pedido/$numero'
   fileRoutesById: FileRoutesById
 }
@@ -124,6 +136,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContatoRoute: typeof ContatoRoute
+  ProdutoProductIdRoute: typeof ProdutoProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -177,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedContaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/produto/$productId': {
+      id: '/produto/$productId'
+      path: '/produto/$productId'
+      fullPath: '/produto/$productId'
+      preLoaderRoute: typeof ProdutoProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/pedido/$numero': {
       id: '/_authenticated/pedido/$numero'
       path: '/pedido/$numero'
@@ -209,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ContatoRoute: ContatoRoute,
+  ProdutoProductIdRoute: ProdutoProductIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -120,7 +120,7 @@ function Checkout() {
     setEnviando(true);
 
     try {
-      const { numero } = await criar({
+      const { numero, emailEnviado } = await criar({
         data: {
           itens: normalizarItens(items),
           freteId,
@@ -133,6 +133,7 @@ function Checkout() {
         to: "/pedido/$numero",
         params: { numero },
       });
+      if (!emailEnviado) toast.warning("Pedido salvo, mas o aviso por e-mail não foi enviado. Envie o número do pedido pelo WhatsApp da loja.", { duration: 12000 });
     } catch (error) {
       toast.error(
         error instanceof Error

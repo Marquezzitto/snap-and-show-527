@@ -34,8 +34,9 @@ function Contato() {
     e.preventDefault();
     setEnviando(true);
     try {
-      await enviar({ data: f });
-      toast.success("Mensagem enviada! Responderemos em breve.");
+      const resultado = await enviar({ data: f });
+      if (resultado.emailEnviado) toast.success("Mensagem enviada! Responderemos em breve.");
+      else toast.warning("Mensagem registrada, mas o aviso por e-mail não foi enviado. Fale conosco pelo WhatsApp.", { duration: 12000 });
       setF({ nome: "", email: "", telefone: "", assunto: "Dúvida", mensagem: "" });
     } catch {
       toast.error("Confira os campos e tente novamente.");

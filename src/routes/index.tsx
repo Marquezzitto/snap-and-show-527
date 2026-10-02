@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { produtos, type Produto } from "@/data/products";
+import { watchPhotos } from "@/data/watchPhotos";
 import { brl, PARCELAS } from "@/lib/pricing";
 import { useCart } from "@/lib/cart";
 import { useEstoque } from "@/lib/estoque";
@@ -79,20 +80,20 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-accent/40 hover:shadow-xl">
-      <div className="relative aspect-square w-full overflow-hidden bg-secondary">
-        {p.imagem ? (
-          <img src={p.imagem} alt={p.nome} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
+      <Link to="/produto/$productId" params={{ productId: p.id }} className="relative block aspect-square w-full overflow-hidden bg-secondary" aria-label={`Ver detalhes de ${p.nome}`}>
+        {(watchPhotos[p.codigo ?? ""]?.[0] ?? p.imagem) ? (
+          <img src={watchPhotos[p.codigo ?? ""]?.[0] ?? p.imagem ?? ""} alt={p.nome} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
         ) : (
           <div className="flex h-full items-center justify-center text-xs text-muted-foreground">Sem foto</div>
         )}
         <span className="absolute left-3 top-3 rounded-full bg-background/80 px-2.5 py-0.5 text-[11px] font-semibold text-accent backdrop-blur">
           {p.categoria}
         </span>
-      </div>
+      </Link>
 
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div>
-          <h3 className="text-base font-bold text-foreground">{p.nome}</h3>
+          <h3 className="text-base font-bold text-foreground"><Link to="/produto/$productId" params={{ productId: p.id }} className="hover:text-accent">{p.nome}</Link></h3>
           <p className="line-clamp-2 text-xs text-muted-foreground">{p.desc}</p>
         </div>
 
