@@ -1,0 +1,160 @@
+// Fotografias da distribuidora, organizadas pelo código do produto.
+import photo_0203_0 from "@/assets/watches/0203-1.jpg.asset.json";
+import photo_0203_1 from "@/assets/watches/0203-2.jpg.asset.json";
+import photo_0203_2 from "@/assets/watches/0203-3.jpg.asset.json";
+import photo_0203_3 from "@/assets/watches/0203-4.jpg.asset.json";
+import photo_0263_0 from "@/assets/watches/0263-1.jpg.asset.json";
+import photo_0263_1 from "@/assets/watches/0263-2.jpg.asset.json";
+import photo_0263_2 from "@/assets/watches/0263-3.jpg.asset.json";
+import photo_0263_3 from "@/assets/watches/0263-4.jpg.asset.json";
+import photo_MW_SU4_0 from "@/assets/watches/mw-su4-1.jpg.asset.json";
+import photo_MW_SU4_1 from "@/assets/watches/mw-su4-2.jpg.asset.json";
+import photo_MW_SU4_2 from "@/assets/watches/mw-su4-3.jpg.asset.json";
+import photo_MW_SU4_3 from "@/assets/watches/mw-su4-4.jpg.asset.json";
+import photo_WZ_DUN_0 from "@/assets/watches/wz-dun-1.jpg.asset.json";
+import photo_WZ_DUN_1 from "@/assets/watches/wz-dun-2.jpg.asset.json";
+import photo_WZ_DUN_2 from "@/assets/watches/wz-dun-3.jpg.asset.json";
+import photo_WZ_DUN_3 from "@/assets/watches/wz-dun-4.jpg.asset.json";
+import photo_WZ_KRO_0 from "@/assets/watches/wz-kro-1.jpg.asset.json";
+import photo_WZ_KRO_1 from "@/assets/watches/wz-kro-2.jpg.asset.json";
+import photo_WZ_KRO_2 from "@/assets/watches/wz-kro-3.jpg.asset.json";
+import photo_WZ_KRO_3 from "@/assets/watches/wz-kro-4.jpg.asset.json";
+import photo_0154_0 from "@/assets/watches/0154-1.jpg.asset.json";
+import photo_0154_1 from "@/assets/watches/0154-2.jpg.asset.json";
+import photo_0154_2 from "@/assets/watches/0154-3.jpg.asset.json";
+import photo_MW_W94_0 from "@/assets/watches/mw-w94-1.jpg.asset.json";
+import photo_MW_W94_1 from "@/assets/watches/mw-w94-2.jpg.asset.json";
+import photo_MW_W94_2 from "@/assets/watches/mw-w94-3.jpg.asset.json";
+import photo_MW_W94_3 from "@/assets/watches/mw-w94-4.jpg.asset.json";
+
+const primaryWatchPhotos: Record<string, string[]> = {
+  "0203": [photo_0203_0.url, photo_0203_1.url, photo_0203_2.url, photo_0203_3.url],
+  "0263": [photo_0263_0.url, photo_0263_1.url, photo_0263_2.url, photo_0263_3.url],
+  "MW-SU4": [photo_MW_SU4_0.url, photo_MW_SU4_1.url, photo_MW_SU4_2.url, photo_MW_SU4_3.url],
+  "WZ-DUN": [photo_WZ_DUN_0.url, photo_WZ_DUN_1.url, photo_WZ_DUN_2.url, photo_WZ_DUN_3.url],
+  "WZ-KRO": [photo_WZ_KRO_0.url, photo_WZ_KRO_1.url, photo_WZ_KRO_2.url, photo_WZ_KRO_3.url],
+  "0154": [photo_0154_0.url, photo_0154_1.url, photo_0154_2.url],
+  "MW-W94": [photo_MW_W94_0.url, photo_MW_W94_1.url, photo_MW_W94_2.url, photo_MW_W94_3.url],
+};
+
+// Fotografias adicionais das pastas de modelos correspondentes.
+import extra_0210_0 from "@/assets/watches/0210-extra-1.jpg.asset.json";
+import extra_0210_1 from "@/assets/watches/0210-extra-2.jpg.asset.json";
+import extra_0210_2 from "@/assets/watches/0210-extra-3.jpg.asset.json";
+import extra_0182_0 from "@/assets/watches/0182-extra-1.png.asset.json";
+import extra_0182_1 from "@/assets/watches/0182-extra-2.png.asset.json";
+import extra_0182_2 from "@/assets/watches/0182-extra-3.png.asset.json";
+import extra_0205_0 from "@/assets/watches/0205-extra-1.jpg.asset.json";
+import extra_0205_1 from "@/assets/watches/0205-extra-2.jpg.asset.json";
+import extra_0205_2 from "@/assets/watches/0205-extra-3.jpg.asset.json";
+import extra_0248_0 from "@/assets/watches/0248-extra-1.jpg.asset.json";
+import extra_0248_1 from "@/assets/watches/0248-extra-2.jpg.asset.json";
+import extra_0248_2 from "@/assets/watches/0248-extra-3.jpg.asset.json";
+import extra_0185_0 from "@/assets/watches/0185-extra-1.jpg.asset.json";
+import extra_0185_1 from "@/assets/watches/0185-extra-2.jpg.asset.json";
+import extra_0185_2 from "@/assets/watches/0185-extra-3.jpg.asset.json";
+import extra_0200_0 from "@/assets/watches/0200-extra-1.jpg.asset.json";
+import extra_0200_1 from "@/assets/watches/0200-extra-2.jpg.asset.json";
+import extra_0200_2 from "@/assets/watches/0200-extra-3.jpg.asset.json";
+import extra_0232_0 from "@/assets/watches/0232-extra-1.jpg.asset.json";
+import extra_0232_1 from "@/assets/watches/0232-extra-2.jpg.asset.json";
+import extra_0232_2 from "@/assets/watches/0232-extra-3.jpg.asset.json";
+import extra_0254_0 from "@/assets/watches/0254-extra-1.jpg.asset.json";
+import extra_0254_1 from "@/assets/watches/0254-extra-2.jpg.asset.json";
+import extra_0254_2 from "@/assets/watches/0254-extra-3.jpg.asset.json";
+import extra_0255_0 from "@/assets/watches/0255-extra-1.jpg.asset.json";
+import extra_0255_1 from "@/assets/watches/0255-extra-2.jpg.asset.json";
+import extra_0255_2 from "@/assets/watches/0255-extra-3.jpg.asset.json";
+import extra_0247_0 from "@/assets/watches/0247-extra-1.jpg.asset.json";
+import extra_0247_1 from "@/assets/watches/0247-extra-2.png.asset.json";
+import extra_0247_2 from "@/assets/watches/0247-extra-3.png.asset.json";
+import extra_0264_0 from "@/assets/watches/0264-extra-1.jpg.asset.json";
+import extra_0264_1 from "@/assets/watches/0264-extra-2.jpg.asset.json";
+import extra_0264_2 from "@/assets/watches/0264-extra-3.jpg.asset.json";
+import extra_0246_0 from "@/assets/watches/0246-extra-1.png.asset.json";
+import extra_0246_1 from "@/assets/watches/0246-extra-2.jpg.asset.json";
+import extra_0246_2 from "@/assets/watches/0246-extra-3.png.asset.json";
+import extra_0267_0 from "@/assets/watches/0267-extra-1.jpg.asset.json";
+import extra_0267_1 from "@/assets/watches/0267-extra-2.jpg.asset.json";
+import extra_0267_2 from "@/assets/watches/0267-extra-3.jpg.asset.json";
+import extra_0265_0 from "@/assets/watches/0265-extra-1.jpg.asset.json";
+import extra_0265_1 from "@/assets/watches/0265-extra-2.jpg.asset.json";
+import extra_0265_2 from "@/assets/watches/0265-extra-3.jpg.asset.json";
+import extra_0253_0 from "@/assets/watches/0253-extra-1.jpg.asset.json";
+import extra_0253_1 from "@/assets/watches/0253-extra-2.jpg.asset.json";
+import extra_0253_2 from "@/assets/watches/0253-extra-3.jpg.asset.json";
+import extra_0241_0 from "@/assets/watches/0241-extra-1.jpg.asset.json";
+import extra_0241_1 from "@/assets/watches/0241-extra-2.jpg.asset.json";
+import extra_0241_2 from "@/assets/watches/0241-extra-3.jpg.asset.json";
+import extra_0233_0 from "@/assets/watches/0233-extra-1.jpg.asset.json";
+import extra_0233_1 from "@/assets/watches/0233-extra-2.jpg.asset.json";
+import extra_0233_2 from "@/assets/watches/0233-extra-3.jpg.asset.json";
+import extra_0257_0 from "@/assets/watches/0257-extra-1.jpg.asset.json";
+import extra_0257_1 from "@/assets/watches/0257-extra-2.jpg.asset.json";
+import extra_0257_2 from "@/assets/watches/0257-extra-3.jpg.asset.json";
+import extra_0262_0 from "@/assets/watches/0262-extra-1.jpg.asset.json";
+import extra_0262_1 from "@/assets/watches/0262-extra-2.jpg.asset.json";
+import extra_0262_2 from "@/assets/watches/0262-extra-3.jpg.asset.json";
+import extra_0201_0 from "@/assets/watches/0201-extra-1.jpg.asset.json";
+import extra_0201_1 from "@/assets/watches/0201-extra-2.jpg.asset.json";
+import extra_0201_2 from "@/assets/watches/0201-extra-3.jpg.asset.json";
+import extra_0225_0 from "@/assets/watches/0225-extra-1.jpg.asset.json";
+import extra_0225_1 from "@/assets/watches/0225-extra-2.jpg.asset.json";
+import extra_0225_2 from "@/assets/watches/0225-extra-3.jpg.asset.json";
+import extra_0224_0 from "@/assets/watches/0224-extra-1.jpg.asset.json";
+import extra_0224_1 from "@/assets/watches/0224-extra-2.jpg.asset.json";
+import extra_0224_2 from "@/assets/watches/0224-extra-3.jpg.asset.json";
+import extra_0234_0 from "@/assets/watches/0234-extra-1.jpg.asset.json";
+import extra_0234_1 from "@/assets/watches/0234-extra-2.jpg.asset.json";
+import extra_0234_2 from "@/assets/watches/0234-extra-3.jpg.asset.json";
+import extra_0249_0 from "@/assets/watches/0249-extra-1.jpg.asset.json";
+import extra_0249_1 from "@/assets/watches/0249-extra-2.jpg.asset.json";
+import extra_0249_2 from "@/assets/watches/0249-extra-3.jpg.asset.json";
+import extra_0245_0 from "@/assets/watches/0245-extra-1.png.asset.json";
+import extra_0245_1 from "@/assets/watches/0245-extra-2.png.asset.json";
+import extra_0245_2 from "@/assets/watches/0245-extra-3.png.asset.json";
+import extra_0244_0 from "@/assets/watches/0244-extra-1.png.asset.json";
+import extra_0244_1 from "@/assets/watches/0244-extra-2.png.asset.json";
+import extra_0244_2 from "@/assets/watches/0244-extra-3.png.asset.json";
+import extra_MW_W1G_0 from "@/assets/watches/mw-w1g-extra-1.jpg.asset.json";
+import extra_MW_W1G_1 from "@/assets/watches/mw-w1g-extra-2.jpg.asset.json";
+import extra_MW_W1G_2 from "@/assets/watches/mw-w1g-extra-3.jpg.asset.json";
+import extra_0258_0 from "@/assets/watches/0258-extra-1.png.asset.json";
+import extra_0258_1 from "@/assets/watches/0258-extra-2.jpg.asset.json";
+import extra_0258_2 from "@/assets/watches/0258-extra-3.png.asset.json";
+import extra_0147_0 from "@/assets/watches/0147-extra-1.jpg.asset.json";
+import extra_0147_1 from "@/assets/watches/0147-extra-2.jpg.asset.json";
+import extra_0147_2 from "@/assets/watches/0147-extra-3.jpg.asset.json";
+const additionalWatchPhotos: Record<string, string[]> = {
+  "0210": [extra_0210_0.url, extra_0210_1.url, extra_0210_2.url],
+  "0182": [extra_0182_0.url, extra_0182_1.url, extra_0182_2.url],
+  "0205": [extra_0205_0.url, extra_0205_1.url, extra_0205_2.url],
+  "0248": [extra_0248_0.url, extra_0248_1.url, extra_0248_2.url],
+  "0185": [extra_0185_0.url, extra_0185_1.url, extra_0185_2.url],
+  "0200": [extra_0200_0.url, extra_0200_1.url, extra_0200_2.url],
+  "0232": [extra_0232_0.url, extra_0232_1.url, extra_0232_2.url],
+  "0254": [extra_0254_0.url, extra_0254_1.url, extra_0254_2.url],
+  "0255": [extra_0255_0.url, extra_0255_1.url, extra_0255_2.url],
+  "0247": [extra_0247_0.url, extra_0247_1.url, extra_0247_2.url],
+  "0264": [extra_0264_0.url, extra_0264_1.url, extra_0264_2.url],
+  "0246": [extra_0246_0.url, extra_0246_1.url, extra_0246_2.url],
+  "0267": [extra_0267_0.url, extra_0267_1.url, extra_0267_2.url],
+  "0265": [extra_0265_0.url, extra_0265_1.url, extra_0265_2.url],
+  "0253": [extra_0253_0.url, extra_0253_1.url, extra_0253_2.url],
+  "0241": [extra_0241_0.url, extra_0241_1.url, extra_0241_2.url],
+  "0233": [extra_0233_0.url, extra_0233_1.url, extra_0233_2.url],
+  "0257": [extra_0257_0.url, extra_0257_1.url, extra_0257_2.url],
+  "0262": [extra_0262_0.url, extra_0262_1.url, extra_0262_2.url],
+  "0201": [extra_0201_0.url, extra_0201_1.url, extra_0201_2.url],
+  "0225": [extra_0225_0.url, extra_0225_1.url, extra_0225_2.url],
+  "0224": [extra_0224_0.url, extra_0224_1.url, extra_0224_2.url],
+  "0234": [extra_0234_0.url, extra_0234_1.url, extra_0234_2.url],
+  "0249": [extra_0249_0.url, extra_0249_1.url, extra_0249_2.url],
+  "0245": [extra_0245_0.url, extra_0245_1.url, extra_0245_2.url],
+  "0244": [extra_0244_0.url, extra_0244_1.url, extra_0244_2.url],
+  "MW-W1G": [extra_MW_W1G_0.url, extra_MW_W1G_1.url, extra_MW_W1G_2.url],
+  "0258": [extra_0258_0.url, extra_0258_1.url, extra_0258_2.url],
+  "0147": [extra_0147_0.url, extra_0147_1.url, extra_0147_2.url],
+};
+
+export const watchPhotos: Record<string, string[]> = { ...additionalWatchPhotos, ...primaryWatchPhotos };

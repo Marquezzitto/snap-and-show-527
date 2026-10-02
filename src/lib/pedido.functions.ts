@@ -296,7 +296,7 @@ export const criarPedido = createServerFn({ method: "POST" })
         .eq("numero", numero);
     }
 
-    return { numero };
+    return { numero, emailEnviado: enviado };
   });
 
 export const enviarContato = createServerFn({ method: "POST" })
@@ -330,7 +330,7 @@ export const enviarContato = createServerFn({ method: "POST" })
       throw new Error("Não foi possível enviar sua mensagem");
     }
 
-    await enviarEmailLoja(
+    const emailEnviado = await enviarEmailLoja(
       `Fale Conosco: ${data.assunto} - ${data.nome}`,
       `
         <h2>${esc(data.assunto)}</h2>
@@ -344,5 +344,5 @@ export const enviarContato = createServerFn({ method: "POST" })
       data.email,
     );
 
-    return { ok: true };
+    return { ok: true, emailEnviado };
   });
