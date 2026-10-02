@@ -80,7 +80,7 @@ export function ProductEditor({ product }: { product: Produto }) {
     setBusy(false);
     toast.success("Foto removida da vitrine.");
   }
-  return <div className="mt-4 space-y-3 border-t border-border pt-4 text-sm">
+  return <details className="mt-4 border-t border-border pt-4 text-sm"><summary className="cursor-pointer font-semibold text-accent">Editar produto, preço e fotos</summary><div className="mt-3 space-y-3">
     <h4 className="font-semibold">Editar produto e fotos</h4>
     <label className="block">Nome<input maxLength={200} value={draft.nome ?? ""} onChange={(e) => setDraft({ ...draft, nome: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-secondary p-2" /></label>
     <label className="block">Descrição<textarea maxLength={2000} value={draft.descricao ?? ""} onChange={(e) => setDraft({ ...draft, descricao: e.target.value })} rows={2} className="mt-1 w-full rounded-md border border-border bg-secondary p-2" /></label>
@@ -93,5 +93,5 @@ export function ProductEditor({ product }: { product: Produto }) {
       {hidden.length > 0 && <div className="mt-3"><p className="text-xs font-semibold">Fotos ocultas do catálogo original</p>{hidden.map((src) => <Button key={src} variant="ghost" size="sm" disabled={busy} onClick={() => setDraft({ ...draft, fotos_ocultas: hidden.filter((x) => x !== src) })}>Restaurar foto</Button>)}<p className="text-xs text-muted-foreground">Clique em salvar para confirmar a restauração.</p></div>}
       {product.cores.length > 0 && <div className="mt-3 space-y-2"><p className="font-medium">Foto ao selecionar cada cor</p>{product.cores.map((cor) => <label key={cor} className="flex items-center gap-2"><span className="w-24 shrink-0 truncate">{cor}</span><select className="min-w-0 flex-1 rounded border border-border bg-secondary p-2" value={draft.fotos_cores[cor] ?? ""} onChange={(e) => setDraft({ ...draft, fotos_cores: { ...draft.fotos_cores, [cor]: e.target.value } })}><option value="">Foto original / primeira foto</option>{gallery.map((src, i) => <option key={src} value={src}>Foto {i + 1}</option>)}</select></label>)}<Button size="sm" disabled={busy} variant="outline" onClick={() => void save()}>Salvar fotos por cor</Button></div>}
     </div>
-  </div>;
+  </div></details>;
 }

@@ -17,12 +17,12 @@ export default defineConfig({
       devOptions: { enabled: false },
       manifest: false,
       workbox: {
-        globPatterns: ["**/*.{js,css,woff2,png,svg}"],
+        globPatterns: ["offline.html", "icon-192.png", "icon-512.png", "**/*.{js,css,woff2}"],
         navigateFallback: undefined,
         runtimeCaching: [{
-          urlPattern: ({ request, url }) => request.mode === "navigate" && url.origin === self.location.origin && !url.pathname.startsWith("/~oauth") && !url.pathname.startsWith("/api/") && !url.pathname.startsWith("/auth") && !url.pathname.startsWith("/checkout") && !url.pathname.startsWith("/pedido"),
-          handler: "NetworkFirst",
-          options: { cacheName: "marks-pages", networkTimeoutSeconds: 5, expiration: { maxEntries: 8, maxAgeSeconds: 3600 } },
+          urlPattern: ({ request, url }) => request.mode === "navigate" && url.origin === self.location.origin && !url.pathname.startsWith("/~oauth") && !url.pathname.startsWith("/api/"),
+          handler: "NetworkOnly",
+          options: { plugins: [{ handlerDidError: async () => (await caches.match("/offline.html")) ?? Response.error() }] },
         }, {
           urlPattern: ({ url }) => url.origin === self.location.origin && /\/assets\/[^/]+-[a-zA-Z0-9]{8,}\.(js|css)$/.test(url.pathname),
           handler: "CacheFirst",
