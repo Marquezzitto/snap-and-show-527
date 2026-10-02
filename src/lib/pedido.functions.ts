@@ -247,7 +247,7 @@ export const criarPedido = createServerFn({ method: "POST" })
     }
 
     const html = `
-      <h2>Novo orçamento ${numero}</h2>
+      <h2>Novo pedido ${numero}</h2>
 
       <p>
         <b>Cliente:</b> ${esc(cliente.nome)}<br>
@@ -295,7 +295,7 @@ export const criarPedido = createServerFn({ method: "POST" })
     `;
 
     const enviado = await enviarEmailLoja(
-      `Novo orçamento ${numero} - ${cliente.nome}`,
+      `Novo pedido ${numero} - ${cliente.nome}`,
       html,
     );
 
