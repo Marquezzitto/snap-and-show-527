@@ -66,7 +66,7 @@ const COR_SWATCH: Record<string, string> = {
 function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, number> }) {
   const { add, setOpen } = useCart();
   const { favorites, toggle } = useFavorites();
-  const { overrides } = useCatalog();
+  const { overrides, healthy } = useCatalog();
   const [cor, setCor] = useState<string | undefined>(p.cores[0]);
   const [tam, setTam] = useState<string | undefined>(p.tamanhos[0]);
   const { gallery, colors: fotosPorCor } = getProductPhotos(p, overrides[p.id]);
@@ -182,14 +182,14 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
           className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground"
         >Consultar preço</a> : <Button
           type="button"
-          disabled={esgotado}
+          disabled={esgotado || !healthy}
           onClick={() => {
             add({ id: p.id, cor: cor ?? "", tam: tam ?? "" });
             toast.success(`${p.nome} adicionado ao carrinho`, { action: { label: "Ver carrinho", onClick: () => setOpen(true) } });
           }}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
-          <ShoppingBag className="h-4 w-4" /> {esgotado ? "Esgotado" : "Adicionar ao carrinho"}
+          <ShoppingBag className="h-4 w-4" /> {!healthy ? "Aguardando preços" : esgotado ? "Esgotado" : "Adicionar ao carrinho"}
         </Button>}
       </div>
     </article>

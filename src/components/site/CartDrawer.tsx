@@ -5,10 +5,11 @@ import { useCart, FRETE_GRATIS_MIN } from "@/lib/cart";
 import { brl } from "@/lib/pricing";
 import { useCatalog } from "@/lib/catalog";
 import { getProductPhotos } from "@/data/productPhotos";
+import { useCatalog } from "@/lib/catalog";
 import { CatalogImage } from "./CatalogImage";
 
 export function CartDrawer() {
-  const { overrides } = useCatalog();
+  const { overrides, healthy } = useCatalog();
   const { open, setOpen, lines, subtotal, setQtd, remove } = useCart();
   const navigate = useNavigate();
   const falta = Math.max(0, FRETE_GRATIS_MIN - subtotal);
@@ -63,10 +64,11 @@ export function CartDrawer() {
             <div className="flex justify-between text-sm"><span className="text-muted-foreground">Subtotal</span><b className="text-foreground">{brl(subtotal)}</b></div>
             <p className="mt-1 text-[11px] text-muted-foreground">Frete calculado na finalização.</p>
             <button
+              disabled={!healthy}
               onClick={() => { setOpen(false); navigate({ to: "/checkout" }); }}
               className="mt-4 w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground hover:bg-accent hover:text-accent-foreground"
             >
-              Finalizar pedido
+              {healthy ? "Finalizar pedido" : "Aguardando preços atualizados"}
             </button>
           </div>
         )}
