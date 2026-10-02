@@ -13,6 +13,9 @@ import {
   type CartItem,
 } from "@/lib/cart";
 import { brl } from "@/lib/pricing";
+import { useCatalog } from "@/lib/catalog";
+import { getProductPhotos } from "@/data/productPhotos";
+import { CatalogImage } from "@/components/site/CatalogImage";
 import {
   carregarPerfil,
   perfilCompleto,
@@ -63,6 +66,7 @@ function normalizarItens(items: CartItem[]) {
 }
 
 function Checkout() {
+  const { overrides, healthy } = useCatalog();
   const { user } = Route.useRouteContext();
   const navigate = useNavigate();
   const { lines, items, subtotal, clear } = useCart();
@@ -117,6 +121,7 @@ function Checkout() {
     : opcoes.find((opcao) => opcao.id === freteId)?.preco ?? null;
 
   async function finalizar() {
+    if (!healthy) { toast.error("Não foi possível confirmar os preços. Conecte-se e tente novamente."); return; }
     setEnviando(true);
 
     try {
@@ -176,8 +181,8 @@ function Checkout() {
                 key={linha.key}
                 className="flex items-center gap-3 p-4"
               >
-                <img
-                  src={linha.produto.imagem ?? ""}
+                <CatalogImage
+                  src={getProductPhotos(linha.produto, overrides[linha.id]).colors[linha.cor] ?? getProductPhotos(linha.produto, overrides[linha.id]).gallery[0]}
                   alt={linha.produto.nome}
                   className="h-14 w-14 rounded-lg bg-secondary object-contain p-1"
                 />

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, ShoppingBag } from "lucide-react";
+import { Heart, Search, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { produtos, type Produto } from "@/data/products";
 import { getProductPhotos } from "@/data/productPhotos";
@@ -11,6 +11,9 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { WhatsAppBubble, WHATSAPP } from "@/components/site/WhatsAppBubble";
 import { Button } from "@/components/ui/button";
+import { useCatalog } from "@/lib/catalog";
+import { CatalogImage } from "@/components/site/CatalogImage";
+import { useFavorites } from "@/lib/favorites";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,9 +65,11 @@ const COR_SWATCH: Record<string, string> = {
 
 function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, number> }) {
   const { add, setOpen } = useCart();
+  const { favorites, toggle } = useFavorites();
+  const { overrides, healthy } = useCatalog();
   const [cor, setCor] = useState<string | undefined>(p.cores[0]);
   const [tam, setTam] = useState<string | undefined>(p.tamanhos[0]);
-  const { gallery, colors: fotosPorCor } = getProductPhotos(p);
+  const { gallery, colors: fotosPorCor } = getProductPhotos(p, overrides[p.id]);
   const imagemAtual = (cor && fotosPorCor[cor]) || gallery[0];
 
   // Chave de estoque: "codigo:cor" ou apenas "codigo" se não tiver cor
@@ -84,7 +89,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-accent/40 hover:shadow-xl">
       <Link to="/produto/$productId" params={{ productId: p.id }} className="relative block aspect-square w-full overflow-hidden bg-secondary" aria-label={`Ver detalhes de ${p.nome}`}>
         {imagemAtual ? (
-          <img src={imagemAtual} alt={`${p.nome}${cor ? ` — ${cor}` : ""}`} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
+          <CatalogImage src={imagemAtual} alt={`${p.nome}${cor ? ` — ${cor}` : ""}`} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
         ) : (
           <div className="flex h-full items-center justify-center text-xs text-muted-foreground">Sem foto</div>
         )}
@@ -92,6 +97,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
           {p.categoria}
         </span>
       </Link>
+      <button type="button" aria-label={favorites.includes(p.id) ? `Desfavoritar ${p.nome}` : `Favoritar ${p.nome}`} onClick={() => toggle(p.id)} className="m-2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-accent"><Heart className={`h-5 w-5 ${favorites.includes(p.id) ? "fill-current" : ""}`} /></button>
 
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div>
@@ -129,7 +135,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
                     >
                       {ativo && <span className="text-white">✓</span>}
                     </span>
-                    {fotosPorCor[c] && <img src={fotosPorCor[c]} alt="" loading="lazy" className="h-6 w-6 shrink-0 rounded-sm bg-card object-contain" />}
+                    {fotosPorCor[c] && <CatalogImage src={fotosPorCor[c]} alt="" loading="lazy" className="h-6 w-6 shrink-0 rounded-sm bg-card object-contain" />}
                     {c}
                   </Button>
                 );
@@ -176,14 +182,14 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
           className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground"
         >Consultar preço</a> : <Button
           type="button"
-          disabled={esgotado}
+          disabled={esgotado || !healthy}
           onClick={() => {
             add({ id: p.id, cor: cor ?? "", tam: tam ?? "" });
             toast.success(`${p.nome} adicionado ao carrinho`, { action: { label: "Ver carrinho", onClick: () => setOpen(true) } });
           }}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
-          <ShoppingBag className="h-4 w-4" /> {esgotado ? "Esgotado" : "Adicionar ao carrinho"}
+          <ShoppingBag className="h-4 w-4" /> {!healthy ? "Aguardando preços" : esgotado ? "Esgotado" : "Adicionar ao carrinho"}
         </Button>}
       </div>
     </article>
@@ -192,22 +198,23 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
 
 function Vitrine() {
   const [busca, setBusca] = useState("");
+  const { products } = useCatalog();
   const { estoque } = useEstoque();
 
   const lista = useMemo(() => {
-    return produtos.filter((p) => {
-      if (busca && !`${p.nome} ${p.desc} ${p.codigo ?? ""}`.toLowerCase().includes(busca.toLowerCase())) return false;
+    return products.filter((p) => {
+      if (busca && !`${p.nome} ${p.desc} ${p.categoria} ${p.codigo ?? ""}`.toLowerCase().includes(busca.toLowerCase())) return false;
       return true;
     });
-  }, [busca]);
+  }, [busca, products]);
 
   const cats = useMemo(
-    () => Array.from(new Set(produtos.map((p) => p.categoria))),
-    [],
+    () => Array.from(new Set(products.map((p) => p.categoria))),
+    [products],
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background pb-16 text-foreground md:pb-0">
       <SiteHeader />
 
       <section className="border-b border-border bg-gradient-to-b from-card/60 to-background py-10">

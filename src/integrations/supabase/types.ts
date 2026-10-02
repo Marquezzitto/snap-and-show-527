@@ -104,6 +104,45 @@ export type Database = {
         }
         Relationships: []
       }
+      product_overrides: {
+        Row: {
+          created_at: string
+          descricao: string | null
+          fotos_adicionais: Json
+          fotos_cores: Json
+          fotos_ocultas: Json
+          nome: string | null
+          preco_vista: number | null
+          product_id: string
+          updated_at: string
+          visivel: boolean
+        }
+        Insert: {
+          created_at?: string
+          descricao?: string | null
+          fotos_adicionais?: Json
+          fotos_cores?: Json
+          fotos_ocultas?: Json
+          nome?: string | null
+          preco_vista?: number | null
+          product_id: string
+          updated_at?: string
+          visivel?: boolean
+        }
+        Update: {
+          created_at?: string
+          descricao?: string | null
+          fotos_adicionais?: Json
+          fotos_cores?: Json
+          fotos_ocultas?: Json
+          nome?: string | null
+          preco_vista?: number | null
+          product_id?: string
+          updated_at?: string
+          visivel?: boolean
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bairro: string

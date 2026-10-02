@@ -8,6 +8,7 @@ import {
 } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { produtos, type Produto } from "@/data/products";
+import { useCatalog } from "@/lib/catalog";
 import { useAuth } from "@/hooks/use-auth";
 import {
   carregarCarrinho,
@@ -131,6 +132,7 @@ function juntarCarrinhos(...carrinhos: CartItem[][]): CartItem[] {
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { products } = useCatalog();
   const { user, loading: authLoading } = useAuth();
   const carregarRemoto = useServerFn(carregarCarrinho);
   const salvarRemoto = useServerFn(salvarCarrinho);
@@ -240,7 +242,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<CartCtx>(() => {
     const lines: CartLine[] = items.flatMap((item) => {
-      const produto = produtos.find((produto) => produto.id === item.id);
+      const produto = products.find((produto) => produto.id === item.id);
 
       if (!produto) {
         return [];
@@ -331,7 +333,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setItems([]);
       },
     };
-  }, [items, open]);
+  }, [items, open, products]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

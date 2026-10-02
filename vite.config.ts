@@ -5,8 +5,32 @@
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  vite: {
+    plugins: [VitePWA({
+      strategies: "generateSW",
+      registerType: "autoUpdate",
+      injectRegister: null,
+      filename: "sw.js",
+      devOptions: { enabled: false },
+      manifest: false,
+      workbox: {
+        globPatterns: ["offline.html", "icon-192.png", "icon-512.png", "**/*.{js,css,woff2}"],
+        navigateFallback: undefined,
+        runtimeCaching: [{
+          urlPattern: ({ request, url }) => request.mode === "navigate" && url.origin === self.location.origin && !url.pathname.startsWith("/~oauth") && !url.pathname.startsWith("/api/"),
+          handler: "NetworkFirst",
+          options: { cacheName: "marks-pages", networkTimeoutSeconds: 5, expiration: { maxEntries: 15, maxAgeSeconds: 60 * 60 * 24 }, plugins: [{ cacheWillUpdate: async () => null, handlerDidError: async () => (await caches.match("/offline.html")) ?? Response.error() }] },
+        }, {
+          urlPattern: ({ url }) => url.origin === self.location.origin && /\/assets\/[^/]+-[a-zA-Z0-9]{8,}\.(js|css)$/.test(url.pathname),
+          handler: "CacheFirst",
+          options: { cacheName: "marks-assets", expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 30 } },
+        }],
+      },
+    })],
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

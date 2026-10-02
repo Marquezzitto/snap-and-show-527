@@ -25,20 +25,27 @@ const itensSchema = z
   .min(1)
   .max(60);
 
-function calcular(itens: z.infer<typeof itensSchema>) {
+async function calcular(itens: z.infer<typeof itensSchema>) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: ajustes, error } = await supabaseAdmin.from("product_overrides").select("product_id, nome, preco_vista, visivel").in("product_id", itens.map((i) => i.id));
+  if (error) throw new Error("Não foi possível conferir os preços. Tente novamente.");
+  const ajustesPorId = new Map((ajustes ?? []).map((a) => [a.product_id, a]));
   const linhas = itens.flatMap((i) => {
     const p = produtos.find((x) => x.id === i.id);
-
+    const ajuste = ajustesPorId.get(i.id);
+    if (ajuste?.visivel === false) throw new Error("Um produto do carrinho não está mais disponível.");
+    const preco = ajuste?.preco_vista == null ? p?.precoVista ?? 0 : Number(ajuste.preco_vista);
+    if (p && preco <= 0) throw new Error(`${p.nome}: preço sob consulta. Fale conosco pelo WhatsApp.`);
     return p
       ? [
           {
-            nome: p.nome,
+            nome: ajuste?.nome ?? p.nome,
             codigo: p.codigo ?? "",
             cor: i.cor,
             tam: i.tam,
             qtd: i.qtd,
-            unit: p.precoVista,
-            total: p.precoVista * i.qtd,
+            unit: preco,
+            total: preco * i.qtd,
           },
         ]
       : [];
@@ -60,7 +67,7 @@ export const calcularFrete = createServerFn({ method: "POST" })
       .parse(d),
   )
   .handler(async ({ data }) => {
-    const { subtotal, qtd } = calcular(data.itens);
+    const { subtotal, qtd } = await calcular(data.itens);
 
     if (subtotal >= FRETE_GRATIS_MIN) {
       return {
@@ -125,7 +132,7 @@ export const criarPedido = createServerFn({ method: "POST" })
       throw new Error("Complete seu cadastro antes de finalizar");
     }
 
-    const { linhas, subtotal, qtd } = calcular(data.itens);
+    const { linhas, subtotal, qtd } = await calcular(data.itens);
 
     if (!linhas.length) {
       throw new Error("Carrinho vazio");
