@@ -1,0 +1,2 @@
+DROP POLICY "Public reads visible product overrides" ON public.product_overrides;
+CREATE POLICY "Public reads catalog display settings" ON public.product_overrides FOR SELECT TO anon, authenticated USING (true);
