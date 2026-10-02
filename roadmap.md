@@ -11,3 +11,5 @@
 - [ ] Vincular a chave completa do Resend pela conexão segura; a captura exibe apenas uma parte.
 
 - [ ] Orientar criação de uma nova chave no Resend; a chave antiga aparece abreviada e não pode ser recuperada pela captura.
+
+- [ ] Depois de testar a nova chave Resend, a chave antiga sem uso pode ser excluída no painel do serviço.
