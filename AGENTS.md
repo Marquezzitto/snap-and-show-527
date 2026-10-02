@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 - Keep the Marks Imports logo as a static file under `public/` so custom-domain deployments can serve it without editor-only asset URLs.
+- Keep catalog products on dedicated `/produto/$productId` routes with distributor-image fallback, so each item has a direct link even without gallery photos.
+- Send store notifications from server code through the linked Resend connector, so mail credentials never enter the browser.
