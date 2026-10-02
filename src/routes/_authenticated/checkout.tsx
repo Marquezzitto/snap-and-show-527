@@ -66,7 +66,7 @@ function normalizarItens(items: CartItem[]) {
 }
 
 function Checkout() {
-  const { overrides, ready } = useCatalog();
+  const { overrides, healthy } = useCatalog();
   const { user } = Route.useRouteContext();
   const navigate = useNavigate();
   const { lines, items, subtotal, clear } = useCart();
@@ -121,7 +121,7 @@ function Checkout() {
     : opcoes.find((opcao) => opcao.id === freteId)?.preco ?? null;
 
   async function finalizar() {
-    if (!ready) { toast.error("Aguarde a atualização dos preços."); return; }
+    if (!healthy) { toast.error("Não foi possível confirmar os preços. Conecte-se e tente novamente."); return; }
     setEnviando(true);
 
     try {

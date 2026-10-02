@@ -34,17 +34,17 @@ export const Route = createFileRoute("/produto/$productId")({
 
 function ProdutoPagina() {
   const original = Route.useLoaderData();
-  const { products, overrides } = useCatalog();
+  const { products, overrides, healthy } = useCatalog();
   const p = products.find((item) => item.id === original.id);
   if (!p) return <UnavailableProduct />;
-  return <AvailableProduct p={p} override={overrides[p.id]} />;
+  return <AvailableProduct p={p} override={overrides[p.id]} healthy={healthy} />;
 }
 
 function UnavailableProduct() {
   return <div className="min-h-screen bg-background text-foreground"><SiteHeader /><main className="mx-auto max-w-3xl px-4 py-16 text-center"><h1 className="text-2xl font-bold">Produto indisponível</h1><p className="mt-3 text-muted-foreground">Este produto não está disponível no momento.</p><Link to="/" className="mt-5 inline-block text-accent underline">Voltar à loja</Link></main></div>;
 }
 
-function AvailableProduct({ p, override }: { p: typeof produtos[number]; override?: import("@/lib/catalog").ProductOverride }) {
+function AvailableProduct({ p, override, healthy }: { p: typeof produtos[number]; override?: import("@/lib/catalog").ProductOverride; healthy: boolean }) {
   const { favorites, toggle } = useFavorites();
   async function share() {
     const data = { title: `${p.nome} — Marks Imports`, text: p.nome, url: location.href };
@@ -99,7 +99,7 @@ function AvailableProduct({ p, override }: { p: typeof produtos[number]; overrid
           {p.tamanhos.length > 1 && <div className="mt-6"><label htmlFor="tamanho" className="mb-2 block text-sm font-semibold">Tamanho</label><select id="tamanho" value={tam} onChange={(e) => setTam(e.target.value)} className="w-full rounded-md border border-border bg-secondary px-3 py-2 text-foreground">{p.tamanhos.map((t) => <option key={t} value={t}>{t}</option>)}</select></div>}
           <p className={`mt-6 text-sm ${esgotado ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{qtd === undefined ? "Estoque sob consulta" : esgotado ? "Esgotado nesta cor" : `Em estoque: ${qtd} ${qtd === 1 ? "unidade" : "unidades"}`}</p>
           {p.precoVista > 0 && !esgotado && <div className="mt-5 flex items-center gap-3"><label htmlFor="quantidade" className="text-sm font-medium">Quantidade</label><input id="quantidade" type="number" min="1" max={Math.min(qtd ?? 50, 50)} value={quantidade} onChange={(e) => setQuantidade(Math.max(1, Math.min(Number(e.target.value) || 1, qtd ?? 50, 50)))} className="w-20 rounded-md border border-border bg-secondary px-3 py-2 text-foreground" /></div>}
-          {p.precoVista > 0 ? <Button className="mt-5 w-full gap-2" size="lg" disabled={esgotado} onClick={() => { add({ id: p.id, cor, tam }, quantidade); toast.success(`${p.nome} adicionado ao carrinho`); setOpen(true); }}><ShoppingBag className="h-4 w-4" />{esgotado ? "Esgotado" : "Adicionar ao carrinho"}</Button> : <Button asChild className="mt-5 w-full" size="lg"><a href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Olá! Tenho interesse neste produto: ${p.nome}`)}`} target="_blank" rel="noopener noreferrer">Consultar preço no WhatsApp</a></Button>}
+          {p.precoVista > 0 ? <Button className="mt-5 w-full gap-2" size="lg" disabled={esgotado || !healthy} onClick={() => { add({ id: p.id, cor, tam }, quantidade); toast.success(`${p.nome} adicionado ao carrinho`); setOpen(true); }}><ShoppingBag className="h-4 w-4" />{!healthy ? "Aguardando preços atualizados" : esgotado ? "Esgotado" : "Adicionar ao carrinho"}</Button> : <Button asChild className="mt-5 w-full" size="lg"><a href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Olá! Tenho interesse neste produto: ${p.nome}`)}`} target="_blank" rel="noopener noreferrer">Consultar preço no WhatsApp</a></Button>}
           <a href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Olá! Tenho interesse neste produto: ${p.nome}`)}`} target="_blank" rel="noopener noreferrer" className="mt-3 block text-center text-sm text-accent underline">Perguntar sobre este produto pelo WhatsApp</a>
           <Link to="/" className="mt-6 inline-flex items-center gap-1 text-sm text-accent"><ChevronLeft className="h-4 w-4" /> Voltar aos produtos</Link>
         </section>

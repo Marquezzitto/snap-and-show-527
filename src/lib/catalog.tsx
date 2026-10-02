@@ -21,8 +21,8 @@ export function mergeProduct(product: Produto, override?: ProductOverride): Prod
     precoVista, parcela: precoVista > 0 ? valorParcela(precoVista) : 0 };
 }
 
-const CatalogContext = createContext<{ products: Produto[]; overrides: Record<string, ProductOverride>; refresh: () => Promise<void>; ready: boolean }>({
-  products: produtos, overrides: {}, refresh: async () => {}, ready: false,
+const CatalogContext = createContext<{ products: Produto[]; overrides: Record<string, ProductOverride>; refresh: () => Promise<void>; ready: boolean; healthy: boolean }>({
+  products: produtos, overrides: {}, refresh: async () => {}, ready: false, healthy: false,
 });
 
 export function CatalogProvider({ children }: { children: ReactNode }) {
@@ -37,7 +37,7 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
   }
   useEffect(() => { void refresh(); }, []);
   const products = useMemo(() => produtos.filter((p) => overrides[p.id]?.visivel !== false).map((p) => mergeProduct(p, overrides[p.id])), [overrides]);
-  return <CatalogContext.Provider value={{ products, overrides, refresh, ready }}>{failed ? <div role="alert" className="bg-destructive p-2 text-center text-sm text-destructive-foreground">Não foi possível atualizar o catálogo. Confira os preços antes de comprar. <button type="button" className="underline" onClick={() => void refresh()}>Tentar novamente</button></div> : null}{children}</CatalogContext.Provider>;
+  return <CatalogContext.Provider value={{ products, overrides, refresh, ready, healthy: ready && !failed }}>{failed ? <div role="alert" className="bg-destructive p-2 text-center text-sm text-destructive-foreground">Não foi possível atualizar o catálogo. Compras pausadas até confirmar os preços. <button type="button" className="underline" onClick={() => void refresh()}>Tentar novamente</button></div> : null}{children}</CatalogContext.Provider>;
 }
 
 export const useCatalog = () => useContext(CatalogContext);
