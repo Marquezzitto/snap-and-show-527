@@ -20,6 +20,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { CatalogProvider } from "@/lib/catalog";
 import { registerStoreWorker } from "@/lib/pwa";
 import { MobileNav } from "@/components/site/MobileNav";
+import { FavoritesProvider } from "@/lib/favorites";
+import { InstallPrompt } from "@/components/site/InstallPrompt";
 
 function NotFoundComponent() {
   return (
@@ -138,14 +140,15 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CatalogProvider><CartProvider>
+      <CatalogProvider><FavoritesProvider><CartProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CartDrawer />
         <WhatsAppBubble />
         <Toaster position="top-center" />
         <MobileNav />
-      </CartProvider></CatalogProvider>
+        <InstallPrompt />
+      </CartProvider></FavoritesProvider></CatalogProvider>
     </QueryClientProvider>
   );
 }

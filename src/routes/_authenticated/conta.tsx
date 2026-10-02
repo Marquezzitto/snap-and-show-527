@@ -7,6 +7,9 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { buscarCep, carregarPerfil, perfilVazio, type Perfil } from "@/lib/perfil";
 import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/pricing";
+import { useFavorites } from "@/lib/favorites";
+import { useCatalog } from "@/lib/catalog";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/conta")({
   head: () => ({ meta: [
@@ -28,6 +31,8 @@ function Conta() {
   const { user } = Route.useRouteContext();
   const navigate = useNavigate();
   const { count } = useCart();
+  const { favorites } = useFavorites();
+  const { products } = useCatalog();
   const [p, setP] = useState<Perfil>(perfilVazio);
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const [salvando, setSalvando] = useState(false);
@@ -84,6 +89,7 @@ function Conta() {
             {salvando ? "Salvando..." : count > 0 ? "Salvar e continuar para o pedido" : "Salvar cadastro"}
           </button>
         </form>
+        <section className="mt-9 rounded-2xl border border-border bg-card p-5"><h2 className="text-lg font-bold text-foreground">Favoritos</h2>{products.filter((item) => favorites.includes(item.id)).length ? <ul className="mt-3 space-y-3">{products.filter((item) => favorites.includes(item.id)).map((item) => <li key={item.id}><Link to="/produto/$productId" params={{ productId: item.id }} className="text-accent underline">{item.nome}</Link></li>)}</ul> : <p className="mt-2 text-sm text-muted-foreground">Você ainda não favoritou produtos.</p>}</section>
 
         <h2 className="mt-10 text-lg font-bold text-foreground">Meus orçamentos</h2>
         {pedidos.length === 0 ? (

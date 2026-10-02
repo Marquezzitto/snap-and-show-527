@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart, Share2, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { produtos } from "@/data/products";
 import { getProductPhotos } from "@/data/productPhotos";
@@ -13,6 +13,7 @@ import { WHATSAPP } from "@/components/site/WhatsAppBubble";
 import { Button } from "@/components/ui/button";
 import { useCatalog } from "@/lib/catalog";
 import { CatalogImage } from "@/components/site/CatalogImage";
+import { useFavorites } from "@/lib/favorites";
 
 export const Route = createFileRoute("/produto/$productId")({
   loader: ({ params }) => {
@@ -44,6 +45,12 @@ function UnavailableProduct() {
 }
 
 function AvailableProduct({ p, override }: { p: typeof produtos[number]; override?: import("@/lib/catalog").ProductOverride }) {
+  const { favorites, toggle } = useFavorites();
+  async function share() {
+    const data = { title: `${p.nome} — Marks Imports`, text: p.nome, url: location.href };
+    try { if (navigator.share) await navigator.share(data); else { await navigator.clipboard.writeText(data.url); toast.success("Link copiado!"); } }
+    catch (error) { if (error instanceof Error && error.name !== "AbortError") toast.error("Não foi possível compartilhar."); }
+  }
   const { gallery: fotos, colors: fotosPorCor } = getProductPhotos(p, override);
   const [foto, setFoto] = useState(0);
   const [cor, setCor] = useState(p.cores[0] ?? "");
@@ -79,6 +86,7 @@ function AvailableProduct({ p, override }: { p: typeof produtos[number]; overrid
         <section>
           <p className="text-xs font-semibold uppercase text-accent">{p.categoria} · Cód. {p.codigo ?? "—"}</p>
           <h1 className="mt-2 text-3xl font-black sm:text-4xl">{p.nome}</h1>
+          <div className="mt-3 flex gap-2"><Button type="button" variant="outline" size="sm" onClick={() => toggle(p.id)}><Heart className={`mr-2 h-4 w-4 ${favorites.includes(p.id) ? "fill-current" : ""}`} />{favorites.includes(p.id) ? "Favoritado" : "Favoritar"}</Button><Button type="button" variant="outline" size="sm" onClick={() => void share()}><Share2 className="mr-2 h-4 w-4" />Compartilhar</Button></div>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
           <div className="mt-7 border-y border-border py-5">
             {p.precoVista > 0 ? <><p className="text-sm text-muted-foreground">À vista</p><p className="text-4xl font-black">{brl(p.precoVista)}</p><p className="mt-1 text-sm text-accent">ou {PARCELAS}x de {brl(p.parcela)} no cartão</p></> : <p className="text-xl font-bold">Preço sob consulta</p>}

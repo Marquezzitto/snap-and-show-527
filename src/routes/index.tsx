@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, ShoppingBag } from "lucide-react";
+import { Heart, Search, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { produtos, type Produto } from "@/data/products";
 import { getProductPhotos } from "@/data/productPhotos";
@@ -13,6 +13,7 @@ import { WhatsAppBubble, WHATSAPP } from "@/components/site/WhatsAppBubble";
 import { Button } from "@/components/ui/button";
 import { useCatalog } from "@/lib/catalog";
 import { CatalogImage } from "@/components/site/CatalogImage";
+import { useFavorites } from "@/lib/favorites";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -64,6 +65,7 @@ const COR_SWATCH: Record<string, string> = {
 
 function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, number> }) {
   const { add, setOpen } = useCart();
+  const { favorites, toggle } = useFavorites();
   const { overrides } = useCatalog();
   const [cor, setCor] = useState<string | undefined>(p.cores[0]);
   const [tam, setTam] = useState<string | undefined>(p.tamanhos[0]);
@@ -95,6 +97,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
           {p.categoria}
         </span>
       </Link>
+      <button type="button" aria-label={favorites.includes(p.id) ? `Desfavoritar ${p.nome}` : `Favoritar ${p.nome}`} onClick={() => toggle(p.id)} className="m-2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-accent"><Heart className={`h-5 w-5 ${favorites.includes(p.id) ? "fill-current" : ""}`} /></button>
 
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div>
