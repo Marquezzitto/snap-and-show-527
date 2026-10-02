@@ -22,7 +22,7 @@ export default defineConfig({
         runtimeCaching: [{
           urlPattern: ({ request, url }) => request.mode === "navigate" && url.origin === self.location.origin && !url.pathname.startsWith("/~oauth") && !url.pathname.startsWith("/api/"),
           handler: "NetworkFirst",
-          options: { cacheName: "marks-pages", networkTimeoutSeconds: 5, expiration: { maxEntries: 15, maxAgeSeconds: 60 * 60 * 24 }, plugins: [{ handlerDidError: async () => (await caches.match("/offline.html")) ?? Response.error() }] },
+          options: { cacheName: "marks-pages", networkTimeoutSeconds: 5, expiration: { maxEntries: 15, maxAgeSeconds: 60 * 60 * 24 }, plugins: [{ cacheWillUpdate: async () => null, handlerDidError: async () => (await caches.match("/offline.html")) ?? Response.error() }] },
         }, {
           urlPattern: ({ url }) => url.origin === self.location.origin && /\/assets\/[^/]+-[a-zA-Z0-9]{8,}\.(js|css)$/.test(url.pathname),
           handler: "CacheFirst",
