@@ -5,7 +5,6 @@ import { useCart, FRETE_GRATIS_MIN } from "@/lib/cart";
 import { brl } from "@/lib/pricing";
 import { useCatalog } from "@/lib/catalog";
 import { getProductPhotos } from "@/data/productPhotos";
-import { useCatalog } from "@/lib/catalog";
 import { CatalogImage } from "./CatalogImage";
 
 export function CartDrawer() {
