@@ -27,7 +27,7 @@ import photo_MW_W94_1 from "@/assets/watches/mw-w94-2.jpg.asset.json";
 import photo_MW_W94_2 from "@/assets/watches/mw-w94-3.jpg.asset.json";
 import photo_MW_W94_3 from "@/assets/watches/mw-w94-4.jpg.asset.json";
 
-export const watchPhotos: Record<string, string[]> = {
+const primaryWatchPhotos: Record<string, string[]> = {
   "0203": [photo_0203_0.url, photo_0203_1.url, photo_0203_2.url, photo_0203_3.url],
   "0263": [photo_0263_0.url, photo_0263_1.url, photo_0263_2.url, photo_0263_3.url],
   "MW-SU4": [photo_MW_SU4_0.url, photo_MW_SU4_1.url, photo_MW_SU4_2.url, photo_MW_SU4_3.url],
@@ -125,7 +125,7 @@ import extra_0258_2 from "@/assets/watches/0258-extra-3.png.asset.json";
 import extra_0147_0 from "@/assets/watches/0147-extra-1.jpg.asset.json";
 import extra_0147_1 from "@/assets/watches/0147-extra-2.jpg.asset.json";
 import extra_0147_2 from "@/assets/watches/0147-extra-3.jpg.asset.json";
-export const additionalWatchPhotos: Record<string, string[]> = {
+const additionalWatchPhotos: Record<string, string[]> = {
   "0210": [extra_0210_0.url, extra_0210_1.url, extra_0210_2.url],
   "0182": [extra_0182_0.url, extra_0182_1.url, extra_0182_2.url],
   "0205": [extra_0205_0.url, extra_0205_1.url, extra_0205_2.url],
@@ -156,3 +156,5 @@ export const additionalWatchPhotos: Record<string, string[]> = {
   "0258": [extra_0258_0.url, extra_0258_1.url, extra_0258_2.url],
   "0147": [extra_0147_0.url, extra_0147_1.url, extra_0147_2.url],
 };
+
+export const watchPhotos: Record<string, string[]> = { ...additionalWatchPhotos, ...primaryWatchPhotos };
