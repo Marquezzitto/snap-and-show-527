@@ -89,6 +89,7 @@ function Conta() {
             {salvando ? "Salvando..." : count > 0 ? "Salvar e continuar para o pedido" : "Salvar cadastro"}
           </button>
         </form>
+        <section className="mt-6 rounded-2xl border border-border bg-card p-5"><h2 className="font-bold text-foreground">Benefícios e atendimento</h2><p className="mt-2 text-sm text-muted-foreground">Cupons e acompanhamento por etapas estarão disponíveis quando forem integrados à loja. Nenhum desconto ou etapa de pagamento é exibido sem confirmação.</p><p className="mt-2 text-sm text-muted-foreground">Precisa de ajuda? Use o botão de WhatsApp nesta página.</p></section>
         <section className="mt-9 rounded-2xl border border-border bg-card p-5"><h2 className="text-lg font-bold text-foreground">Favoritos</h2>{products.filter((item) => favorites.includes(item.id)).length ? <ul className="mt-3 space-y-3">{products.filter((item) => favorites.includes(item.id)).map((item) => <li key={item.id}><Link to="/produto/$productId" params={{ productId: item.id }} className="text-accent underline">{item.nome}</Link></li>)}</ul> : <p className="mt-2 text-sm text-muted-foreground">Você ainda não favoritou produtos.</p>}</section>
 
         <h2 className="mt-10 text-lg font-bold text-foreground">Meus orçamentos</h2>
