@@ -13,3 +13,5 @@
 - Keep catalog products on dedicated `/produto/$productId` routes with distributor-image fallback, so each item has a direct link even without gallery photos.
 - Send store notifications from server code through the linked Resend connector, so mail credentials never enter the browser.
 - Keep verified product galleries and color-specific image mappings in shared catalog data, so the listing and product page display the same correct variant.
+- Keep administrator catalog edits as role-protected overrides on the original catalog and revalidate prices during server-side checkout, so product pages, carts, and orders agree without replacing source products.
+- Keep this storefront web-only until app installation is explicitly requested again, so no service worker or offline cache can serve stale prices or inventory.
