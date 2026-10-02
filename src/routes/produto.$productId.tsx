@@ -11,6 +11,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { WHATSAPP } from "@/components/site/WhatsAppBubble";
 import { Button } from "@/components/ui/button";
+import { useCatalog } from "@/lib/catalog";
+import { CatalogImage } from "@/components/site/CatalogImage";
 
 export const Route = createFileRoute("/produto/$productId")({
   loader: ({ params }) => {
@@ -30,8 +32,10 @@ export const Route = createFileRoute("/produto/$productId")({
 });
 
 function ProdutoPagina() {
-  const p = Route.useLoaderData();
-  const { gallery: fotos, colors: fotosPorCor } = getProductPhotos(p);
+  const original = Route.useLoaderData();
+  const { products, overrides } = useCatalog();
+  const p = products.find((item) => item.id === original.id) ?? original;
+  const { gallery: fotos, colors: fotosPorCor } = getProductPhotos(p, overrides[p.id]);
   const [foto, setFoto] = useState(0);
   const [cor, setCor] = useState(p.cores[0] ?? "");
   const [tam, setTam] = useState(p.tamanhos[0] ?? "");
@@ -44,7 +48,7 @@ function ProdutoPagina() {
   const esgotado = qtd !== undefined && qtd <= 0;
   const fotoAtual = fotos[foto] ?? fotos[0];
 
-  return <div className="min-h-screen bg-background text-foreground">
+  return <div className="min-h-screen bg-background pb-16 text-foreground md:pb-0">
     <SiteHeader />
     <main className="mx-auto max-w-6xl px-4 pb-20 pt-6 sm:px-6">
       <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground" aria-label="Navegação">
@@ -53,14 +57,14 @@ function ProdutoPagina() {
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12">
         <section aria-label={`Fotos de ${p.nome}`} className="min-w-0">
           <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-border bg-card">
-            {fotoAtual ? <img src={fotoAtual} alt={`${p.nome} — foto ${foto + 1}`} className="h-full w-full object-contain p-4" /> : <span className="text-muted-foreground">Foto indisponível</span>}
+            {fotoAtual ? <CatalogImage src={fotoAtual} alt={`${p.nome} — foto ${foto + 1}`} className="h-full w-full object-contain p-4" /> : <span className="text-muted-foreground">Foto indisponível</span>}
             {fotos.length > 1 && <>
               <Button size="icon" variant="secondary" aria-label="Foto anterior" onClick={() => setFoto((foto - 1 + fotos.length) % fotos.length)} className="absolute left-3 top-1/2 -translate-y-1/2"><ChevronLeft className="h-5 w-5" /></Button>
               <Button size="icon" variant="secondary" aria-label="Próxima foto" onClick={() => setFoto((foto + 1) % fotos.length)} className="absolute right-3 top-1/2 -translate-y-1/2"><ChevronRight className="h-5 w-5" /></Button>
             </>}
           </div>
           {fotos.length > 1 && <div className="mt-3 flex gap-2 overflow-x-auto pb-2" aria-label="Miniaturas das fotos">
-            {fotos.map((src, index) => <Button key={`${src}-${index}`} type="button" size="icon" variant="ghost" onClick={() => setFoto(index)} aria-label={`Ver foto ${index + 1}`} aria-pressed={foto === index} className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-card p-0 ${foto === index ? "border-accent" : "border-border"}`}><img src={src} alt="" loading="lazy" className="h-full w-full object-contain p-1" /></Button>)}
+             {fotos.map((src, index) => <Button key={`${src}-${index}`} type="button" size="icon" variant="ghost" onClick={() => setFoto(index)} aria-label={`Ver foto ${index + 1}`} aria-pressed={foto === index} className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-card p-0 ${foto === index ? "border-accent" : "border-border"}`}><CatalogImage src={src} alt="" loading="lazy" className="h-full w-full object-contain p-1" /></Button>)}
           </div>}
         </section>
         <section>
@@ -73,7 +77,7 @@ function ProdutoPagina() {
           {p.cores.length > 0 && <fieldset className="mt-6"><legend className="mb-2 text-sm font-semibold">Cor: {cor}</legend><div className="flex flex-wrap gap-2">{p.cores.map((c) => {
             const disponivel = p.codigo ? estoque[`${p.codigo}:${c}`] : undefined;
              const imagemCor = fotosPorCor[c];
-             return <Button key={c} type="button" variant={cor === c ? "default" : "outline"} onClick={() => { setCor(c); setQuantidade(1); setFoto(imagemCor ? Math.max(0, fotos.indexOf(imagemCor)) : 0); }} className={`h-auto min-h-12 gap-2 px-2 ${disponivel === 0 ? "opacity-60 line-through" : ""}`}>{imagemCor && <img src={imagemCor} alt="" loading="lazy" className="h-9 w-9 shrink-0 rounded-sm bg-card object-contain" />}<span>{c}{disponivel !== undefined && ` · ${disponivel} un.`}</span></Button>;
+              return <Button key={c} type="button" variant={cor === c ? "default" : "outline"} onClick={() => { setCor(c); setQuantidade(1); setFoto(imagemCor ? Math.max(0, fotos.indexOf(imagemCor)) : 0); }} className={`h-auto min-h-12 gap-2 px-2 ${disponivel === 0 ? "opacity-60 line-through" : ""}`}>{imagemCor && <CatalogImage src={imagemCor} alt="" loading="lazy" className="h-9 w-9 shrink-0 rounded-sm bg-card object-contain" />}<span>{c}{disponivel !== undefined && ` · ${disponivel} un.`}</span></Button>;
           })}</div></fieldset>}
           {p.tamanhos.length > 1 && <div className="mt-6"><label htmlFor="tamanho" className="mb-2 block text-sm font-semibold">Tamanho</label><select id="tamanho" value={tam} onChange={(e) => setTam(e.target.value)} className="w-full rounded-md border border-border bg-secondary px-3 py-2 text-foreground">{p.tamanhos.map((t) => <option key={t} value={t}>{t}</option>)}</select></div>}
           <p className={`mt-6 text-sm ${esgotado ? "font-semibold text-destructive" : "text-muted-foreground"}`}>{qtd === undefined ? "Estoque sob consulta" : esgotado ? "Esgotado nesta cor" : `Em estoque: ${qtd} ${qtd === 1 ? "unidade" : "unidades"}`}</p>

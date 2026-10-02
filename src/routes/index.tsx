@@ -11,6 +11,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { WhatsAppBubble, WHATSAPP } from "@/components/site/WhatsAppBubble";
 import { Button } from "@/components/ui/button";
+import { useCatalog } from "@/lib/catalog";
+import { CatalogImage } from "@/components/site/CatalogImage";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,9 +64,10 @@ const COR_SWATCH: Record<string, string> = {
 
 function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, number> }) {
   const { add, setOpen } = useCart();
+  const { overrides } = useCatalog();
   const [cor, setCor] = useState<string | undefined>(p.cores[0]);
   const [tam, setTam] = useState<string | undefined>(p.tamanhos[0]);
-  const { gallery, colors: fotosPorCor } = getProductPhotos(p);
+  const { gallery, colors: fotosPorCor } = getProductPhotos(p, overrides[p.id]);
   const imagemAtual = (cor && fotosPorCor[cor]) || gallery[0];
 
   // Chave de estoque: "codigo:cor" ou apenas "codigo" se não tiver cor
@@ -84,7 +87,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-accent/40 hover:shadow-xl">
       <Link to="/produto/$productId" params={{ productId: p.id }} className="relative block aspect-square w-full overflow-hidden bg-secondary" aria-label={`Ver detalhes de ${p.nome}`}>
         {imagemAtual ? (
-          <img src={imagemAtual} alt={`${p.nome}${cor ? ` — ${cor}` : ""}`} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
+          <CatalogImage src={imagemAtual} alt={`${p.nome}${cor ? ` — ${cor}` : ""}`} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105" />
         ) : (
           <div className="flex h-full items-center justify-center text-xs text-muted-foreground">Sem foto</div>
         )}
@@ -129,7 +132,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
                     >
                       {ativo && <span className="text-white">✓</span>}
                     </span>
-                    {fotosPorCor[c] && <img src={fotosPorCor[c]} alt="" loading="lazy" className="h-6 w-6 shrink-0 rounded-sm bg-card object-contain" />}
+                    {fotosPorCor[c] && <CatalogImage src={fotosPorCor[c]} alt="" loading="lazy" className="h-6 w-6 shrink-0 rounded-sm bg-card object-contain" />}
                     {c}
                   </Button>
                 );
@@ -192,22 +195,23 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
 
 function Vitrine() {
   const [busca, setBusca] = useState("");
+  const { products } = useCatalog();
   const { estoque } = useEstoque();
 
   const lista = useMemo(() => {
-    return produtos.filter((p) => {
-      if (busca && !`${p.nome} ${p.desc} ${p.codigo ?? ""}`.toLowerCase().includes(busca.toLowerCase())) return false;
+    return products.filter((p) => {
+      if (busca && !`${p.nome} ${p.desc} ${p.categoria} ${p.codigo ?? ""}`.toLowerCase().includes(busca.toLowerCase())) return false;
       return true;
     });
-  }, [busca]);
+  }, [busca, products]);
 
   const cats = useMemo(
-    () => Array.from(new Set(produtos.map((p) => p.categoria))),
-    [],
+    () => Array.from(new Set(products.map((p) => p.categoria))),
+    [products],
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background pb-16 text-foreground md:pb-0">
       <SiteHeader />
 
       <section className="border-b border-border bg-gradient-to-b from-card/60 to-background py-10">
