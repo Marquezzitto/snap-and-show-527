@@ -5,6 +5,8 @@ import { produtos, type Produto } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { useEstoque, useIsAdmin } from "@/lib/estoque";
 import { SiteHeader } from "@/components/site/SiteHeader";
+import { useCatalog } from "@/lib/catalog";
+import { ProductEditor } from "@/components/site/ProductEditor";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -78,6 +80,7 @@ function LinhaEstoque({
           Salvar
         </button>
       </div>
+      <ProductEditor product={p} />
     </div>
   );
 }
@@ -123,13 +126,14 @@ function CardProdutoAdmin({ p, estoque, onSalvo }: { p: Produto; estoque: Record
 }
 
 function Admin() {
+  const { products } = useCatalog();
   const { isAdmin, checking } = useIsAdmin();
   const { estoque, loading, recarregar } = useEstoque();
   const [busca, setBusca] = useState("");
 
   const lista = useMemo(
-    () => produtos.filter((p) => p.codigo && `${p.nome} ${p.codigo}`.toLowerCase().includes(busca.toLowerCase())),
-    [busca],
+    () => produtos.map((p) => products.find((visible) => visible.id === p.id) ?? p).filter((p) => p.codigo && `${p.nome} ${p.codigo}`.toLowerCase().includes(busca.toLowerCase())),
+    [busca, products],
   );
 
   if (checking || loading) return <div className="p-12 text-center text-muted-foreground">Carregando estoque...</div>;
@@ -153,8 +157,8 @@ function Admin() {
       <main className="mx-auto max-w-5xl px-4 py-8">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-2xl font-black">Gerenciador de Estoque por Variação</h1>
-            <p className="text-xs text-muted-foreground">Defina a quantidade exata de cada cor. Deixe em branco se não quiser limitar.</p>
+            <h1 className="text-2xl font-black">Gerenciar produtos, fotos e estoque</h1>
+            <p className="text-xs text-muted-foreground">Edite o produto, fotos e a quantidade por cor. Estoque em branco significa sem limite.</p>
           </div>
           <input
             type="text"

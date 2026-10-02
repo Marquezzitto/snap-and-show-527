@@ -27,7 +27,7 @@ const itensSchema = z
 
 async function calcular(itens: z.infer<typeof itensSchema>) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data: ajustes, error } = await supabaseAdmin.from("product_overrides").select("product_id, preco_vista, visivel").in("product_id", itens.map((i) => i.id));
+  const { data: ajustes, error } = await supabaseAdmin.from("product_overrides").select("product_id, nome, preco_vista, visivel").in("product_id", itens.map((i) => i.id));
   if (error) throw new Error("Não foi possível conferir os preços. Tente novamente.");
   const ajustesPorId = new Map((ajustes ?? []).map((a) => [a.product_id, a]));
   const linhas = itens.flatMap((i) => {
@@ -39,7 +39,7 @@ async function calcular(itens: z.infer<typeof itensSchema>) {
     return p
       ? [
           {
-            nome: p.nome,
+            nome: ajuste?.nome ?? p.nome,
             codigo: p.codigo ?? "",
             cor: i.cor,
             tam: i.tam,

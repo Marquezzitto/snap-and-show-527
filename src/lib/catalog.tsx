@@ -28,14 +28,16 @@ const CatalogContext = createContext<{ products: Produto[]; overrides: Record<st
 export function CatalogProvider({ children }: { children: ReactNode }) {
   const [overrides, setOverrides] = useState<Record<string, ProductOverride>>({});
   const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
   async function refresh() {
     const { data, error } = await supabase.from("product_overrides").select("product_id,nome,descricao,preco_vista,visivel,fotos_adicionais,fotos_ocultas,fotos_cores");
-    if (!error) setOverrides(Object.fromEntries((data ?? []).map((row) => [row.product_id, row as ProductOverride])));
+    if (!error) { setOverrides(Object.fromEntries((data ?? []).map((row) => [row.product_id, row as ProductOverride]))); setFailed(false); }
+    else setFailed(true);
     setReady(true);
   }
   useEffect(() => { void refresh(); }, []);
   const products = useMemo(() => produtos.filter((p) => overrides[p.id]?.visivel !== false).map((p) => mergeProduct(p, overrides[p.id])), [overrides]);
-  return <CatalogContext.Provider value={{ products, overrides, refresh, ready }}>{children}</CatalogContext.Provider>;
+  return <CatalogContext.Provider value={{ products, overrides, refresh, ready }}>{failed ? <div role="alert" className="bg-destructive p-2 text-center text-sm text-destructive-foreground">Não foi possível atualizar o catálogo. Confira os preços antes de comprar. <button type="button" className="underline" onClick={() => void refresh()}>Tentar novamente</button></div> : null}{children}</CatalogContext.Provider>;
 }
 
 export const useCatalog = () => useContext(CatalogContext);

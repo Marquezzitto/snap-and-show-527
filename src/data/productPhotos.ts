@@ -9,6 +9,6 @@ export function getProductPhotos(product: Produto, override?: ProductOverride) {
   const code = product.codigo ?? "";
   const source = photos[code];
   const gallery = [...new Set([...(override?.fotos_adicionais ?? []), ...(source?.photos ?? []), ...(watchPhotos[code] ?? []), ...(product.imagem ? [product.imagem] : [])])].filter((photo) => !override?.fotos_ocultas.includes(photo));
-  const colors = { ...(source?.colors ?? {}), ...(override?.fotos_cores ?? {}) };
+  const colors = Object.fromEntries(Object.entries({ ...(source?.colors ?? {}), ...(override?.fotos_cores ?? {}) }).filter(([, src]) => !!src && gallery.includes(src)));
   return { gallery, colors };
 }
