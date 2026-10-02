@@ -18,6 +18,8 @@ const MAX_SIZE = 5 * 1024 * 1024;
 export function ProductEditor({ product }: { product: Produto }) {
   const { overrides, refresh } = useCatalog();
   const original = overrides[product.id];
+  const originalName = product.nome;
+  const originalDesc = product.desc;
   const [draft, setDraft] = useState<ProductOverride>(() => ({ product_id: product.id, nome: original?.nome ?? product.nome, descricao: original?.descricao ?? product.desc,
     preco_vista: original?.preco_vista ?? null, visivel: original?.visivel ?? true, fotos_adicionais: original?.fotos_adicionais ?? [], fotos_ocultas: original?.fotos_ocultas ?? [], fotos_cores: original?.fotos_cores ?? {} }));
   const [busy, setBusy] = useState(false);
