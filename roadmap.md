@@ -16,8 +16,8 @@
 - [ ] Identificar com segurança qual chave está ligada à conexão antes de excluir qualquer chave do Resend — não apagar a chave antiga apenas pelo contador de usos da captura.
 
 ## Loja mobile e autonomia
-- [ ] Preservar catálogo existente e permitir ao admin editar preços, informações, visibilidade e fotos, com segurança.
-- [ ] Aplicar preços editados no carrinho, frete e pedidos.
-- [ ] Melhorar navegação e uso da loja no celular sem alterar desktop.
-- [ ] Instalação PWA e suporte offline seguro sem cache de preços/estoque.
-- [ ] Validar telas, fotos, pedidos e instalação na medida permitida pelo ambiente.
+- [x] Preservar catálogo existente e permitir ao admin editar preços, informações, visibilidade e fotos, com segurança.
+- [x] Aplicar preços editados no carrinho, frete e pedidos.
+- [x] Melhorar navegação e uso da loja no celular sem alterar desktop.
+- [ ] Instalação como aplicativo e suporte offline — adiado a pedido do usuário para outro momento.
+- [x] Validar vitrine e páginas de produtos no celular e computador; fotos por cor verificadas. Pedidos reais e edição autenticada do admin ainda exigem validação com a conta proprietária.

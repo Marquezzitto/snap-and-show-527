@@ -18,10 +18,8 @@ import { CartDrawer } from "@/components/site/CartDrawer";
 import { WhatsAppBubble } from "@/components/site/WhatsAppBubble";
 import { Toaster } from "@/components/ui/sonner";
 import { CatalogProvider } from "@/lib/catalog";
-import { registerStoreWorker } from "@/lib/pwa";
 import { MobileNav } from "@/components/site/MobileNav";
 import { FavoritesProvider } from "@/lib/favorites";
-import { InstallPrompt } from "@/components/site/InstallPrompt";
 
 function NotFoundComponent() {
   return (
@@ -100,8 +98,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
-      { rel: "manifest", href: "/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/icon-192.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -129,7 +125,6 @@ function RootComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    void registerStoreWorker();
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
@@ -147,7 +142,6 @@ function RootComponent() {
         <WhatsAppBubble />
         <Toaster position="top-center" />
         <MobileNav />
-        <InstallPrompt />
       </CartProvider></FavoritesProvider></CatalogProvider>
     </QueryClientProvider>
   );

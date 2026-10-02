@@ -17,7 +17,9 @@ function Categories() {
   const cats = Array.from(new Set(products.map((p) => p.categoria)));
   return <div className="min-h-screen bg-background text-foreground"><SiteHeader /><main className="mx-auto max-w-6xl px-4 py-8 pb-24"><h1 className="mb-7 text-3xl font-bold">Categorias</h1><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">{cats.map((cat) => {
     const items = products.filter((p) => p.categoria === cat);
-    const image = getProductPhotos(items[0], overrides[items[0].id]).gallery[0];
+     const first = items[0];
+     if (!first) return null;
+     const image = getProductPhotos(first, overrides[first.id]).gallery[0];
     return <Link key={cat} to="/" hash={cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-")} className="overflow-hidden rounded-md border border-border bg-card"><div className="aspect-square bg-secondary">{image && <CatalogImage src={image} alt="" className="h-full w-full object-contain p-3" />}</div><div className="p-3"><h2 className="font-semibold">{cat}</h2><p className="text-xs text-muted-foreground">{items.length} produtos</p></div></Link>;
   })}</div></main><SiteFooter /></div>;
 }
