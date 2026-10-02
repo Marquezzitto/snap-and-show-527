@@ -38,7 +38,7 @@ function ProdutoPagina() {
   const [quantidade, setQuantidade] = useState(1);
   const { estoque } = useEstoque();
   const { add, setOpen } = useCart();
-  useEffect(() => { setFoto(Math.max(0, fotos.indexOf(fotosPorCor[p.cores[0] ?? ""]))); setCor(p.cores[0] ?? ""); setTam(p.tamanhos[0] ?? ""); setQuantidade(1); }, [p.id]);
+  useEffect(() => { const imagemInicial = fotosPorCor[p.cores[0] ?? ""]; setFoto(imagemInicial ? Math.max(0, fotos.indexOf(imagemInicial)) : 0); setCor(p.cores[0] ?? ""); setTam(p.tamanhos[0] ?? ""); setQuantidade(1); }, [p.id]);
   const geral = p.codigo ? estoque[p.codigo] : undefined;
   const qtd = p.codigo && cor && estoque[`${p.codigo}:${cor}`] !== undefined ? estoque[`${p.codigo}:${cor}`] : geral;
   const esgotado = qtd !== undefined && qtd <= 0;
