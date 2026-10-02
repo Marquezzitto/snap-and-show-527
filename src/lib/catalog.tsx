@@ -31,7 +31,7 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
   const [failed, setFailed] = useState(false);
   async function refresh() {
     const { data, error } = await supabase.from("product_overrides").select("product_id,nome,descricao,preco_vista,visivel,fotos_adicionais,fotos_ocultas,fotos_cores");
-    if (!error) { setOverrides(Object.fromEntries((data ?? []).map((row) => [row.product_id, row as ProductOverride]))); setFailed(false); }
+    if (!error) { setOverrides(Object.fromEntries((data ?? []).map((row) => [row.product_id, row as unknown as ProductOverride]))); setFailed(false); }
     else setFailed(true);
     setReady(true);
   }

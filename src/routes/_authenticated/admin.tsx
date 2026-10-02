@@ -80,7 +80,6 @@ function LinhaEstoque({
           Salvar
         </button>
       </div>
-      <ProductEditor product={p} />
     </div>
   );
 }
@@ -121,6 +120,7 @@ function CardProdutoAdmin({ p, estoque, onSalvo }: { p: Produto; estoque: Record
           />
         )}
       </div>
+      <ProductEditor product={p} />
     </div>
   );
 }
