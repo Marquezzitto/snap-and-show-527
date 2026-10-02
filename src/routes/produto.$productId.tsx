@@ -48,7 +48,11 @@ function AvailableProduct({ p, override, healthy }: { p: typeof produtos[number]
   const { favorites, toggle } = useFavorites();
   async function share() {
     const data = { title: `${p.nome} — Marks Imports`, text: p.nome, url: location.href };
-    try { if (navigator.share) await navigator.share(data); else { await navigator.clipboard.writeText(data.url); toast.success("Link copiado!"); } }
+    try { if (navigator.share) await navigator.share(data); else {
+      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(data.url);
+      else { const field = document.createElement("textarea"); field.value = data.url; field.style.position = "fixed"; field.style.opacity = "0"; document.body.appendChild(field); field.select(); const copied = document.execCommand("copy"); field.remove(); if (!copied) throw new Error("Não foi possível copiar"); }
+      toast.success("Link copiado!");
+    } }
     catch (error) { if (error instanceof Error && error.name !== "AbortError") toast.error("Não foi possível compartilhar."); }
   }
   const { gallery: fotos, colors: fotosPorCor } = getProductPhotos(p, override);
