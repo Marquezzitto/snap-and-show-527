@@ -30,6 +30,8 @@ export const Route = createFileRoute("/produto/$productId")({
     { name: "twitter:card", content: "summary" },
   ] }),
   component: ProdutoPagina,
+  errorComponent: () => <UnavailableProduct />,
+  notFoundComponent: () => <UnavailableProduct />,
 });
 
 function ProdutoPagina() {
@@ -44,7 +46,7 @@ function UnavailableProduct() {
   return <div className="min-h-screen bg-background text-foreground"><SiteHeader /><main className="mx-auto max-w-3xl px-4 py-16 text-center"><h1 className="text-2xl font-bold">Produto indisponível</h1><p className="mt-3 text-muted-foreground">Este produto não está disponível no momento.</p><Link to="/" className="mt-5 inline-block text-accent underline">Voltar à loja</Link></main></div>;
 }
 
-function AvailableProduct({ p, override, healthy }: { p: typeof produtos[number]; override?: import("@/lib/catalog").ProductOverride; healthy: boolean }) {
+function AvailableProduct({ p, override, healthy }: { p: typeof produtos[number]; override: import("@/lib/catalog").ProductOverride | undefined; healthy: boolean }) {
   const { favorites, toggle } = useFavorites();
   async function share() {
     const data = { title: `${p.nome} — Marks Imports`, text: p.nome, url: location.href };

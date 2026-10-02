@@ -19,5 +19,5 @@
 - [ ] Preservar catálogo existente e permitir ao admin editar preços, informações, visibilidade e fotos, com segurança.
 - [ ] Aplicar preços editados no carrinho, frete e pedidos.
 - [ ] Melhorar navegação e uso da loja no celular sem alterar desktop.
-- [ ] Instalação PWA e suporte offline seguro sem cache de preços/estoque.
-- [ ] Validar telas, fotos, pedidos e instalação na medida permitida pelo ambiente.
+- [ ] Instalação como aplicativo e suporte offline — adiado a pedido do usuário para outro momento.
+- [ ] Validar telas, fotos e pedidos na medida permitida pelo ambiente.
