@@ -219,7 +219,7 @@ function Vitrine() {
 
       <section className="border-b border-border bg-gradient-to-b from-card/60 to-background py-10">
         <div className="mx-auto max-w-6xl px-4 text-center">
-          <h1 className="text-3xl font-black tracking-tight sm:text-5xl">Catálogo Marks Imports</h1>
+           <h1 className="text-3xl font-black tracking-tight sm:text-5xl">Marks Imports</h1>
           <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
             Smartwatches, kits, pulseiras e acessórios com frete grátis para todo o Brasil acima de R$ 420.
           </p>
