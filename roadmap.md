@@ -17,6 +17,8 @@
 
 ## Loja mobile e autonomia
 - [x] Preservar catálogo existente e permitir ao admin editar preços, informações, visibilidade e fotos, com segurança.
+- [ ] Deixar no acesso da proprietária controles visíveis para adicionar, editar e excluir itens, fotos, vídeos e valores.
+- [ ] Preencher o modelo de cadastro em massa da Shopee com todos os produtos e dados confirmados da loja.
 - [x] Aplicar preços editados no carrinho, frete e pedidos.
 - [x] Melhorar navegação e uso da loja no celular sem alterar desktop.
 - [ ] Instalação como aplicativo e suporte offline — adiado a pedido do usuário para outro momento.
