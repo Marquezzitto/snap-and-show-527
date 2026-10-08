@@ -16,6 +16,7 @@
 - [ ] Identificar com segurança qual chave está ligada à conexão antes de excluir qualquer chave do Resend — não apagar a chave antiga apenas pelo contador de usos da captura.
 
 ## Loja mobile e autonomia
+- [x] Preservar a edição existente e os preços sob consulta; mostrar “Sem estoque” para estoque zerado, sem alterar preços ou quantidades. Verificado na vitrine e na página do produto com estoque simulado.
 - [x] Preservar catálogo existente e permitir ao admin editar preços, informações, visibilidade e fotos, com segurança.
 - [ ] Deixar no acesso da proprietária controles visíveis para adicionar, editar e excluir itens, fotos, vídeos e valores.
 - [ ] Preencher o modelo de cadastro em massa da Shopee com todos os produtos e dados confirmados da loja.

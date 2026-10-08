@@ -159,7 +159,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
           {qtd === undefined ? (
             <span className="text-muted-foreground">Estoque sob consulta</span>
           ) : esgotado ? (
-            <span className="font-bold text-destructive">Esgotado nesta cor</span>
+            <span className="font-bold text-destructive">Sem estoque</span>
           ) : qtd <= 5 ? (
             <span className="font-bold text-accent">Últimas {qtd} unidades em estoque!</span>
           ) : (
@@ -189,7 +189,7 @@ function ProdutoCard({ p, estoque }: { p: Produto; estoque: Record<string, numbe
           }}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
-          <ShoppingBag className="h-4 w-4" /> {!healthy ? "Aguardando preços" : esgotado ? "Esgotado" : "Adicionar ao carrinho"}
+          <ShoppingBag className="h-4 w-4" /> {!healthy ? "Aguardando preços" : esgotado ? "Sem estoque" : "Adicionar ao carrinho"}
         </Button>}
       </div>
     </article>
