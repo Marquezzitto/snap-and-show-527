@@ -15,10 +15,13 @@ export function useHomepageCarousel() {
       const { data, error } = await supabase.from("homepage_carousel").select("slides").eq("id", "main").maybeSingle();
       if (error) throw error;
       if (!data) return null;
-      return (Array.isArray(data.slides) ? data.slides : []).filter((slide): slide is unknown & HomepageSlide =>
-        typeof slide === "object" && slide !== null && "id" in slide && typeof slide.id === "string" &&
-        "productId" in slide && typeof slide.productId === "string" && "imagePath" in slide && typeof slide.imagePath === "string"
-      ) as HomepageSlide[];
+      const result: HomepageSlide[] = [];
+      for (const slide of Array.isArray(data.slides) ? data.slides : []) {
+        if (typeof slide !== "object" || slide === null || Array.isArray(slide)) continue;
+        const id = slide["id"], productId = slide["productId"], imagePath = slide["imagePath"];
+        if (typeof id === "string" && typeof productId === "string" && typeof imagePath === "string") result.push({ id, productId, imagePath });
+      }
+      return result;
     },
   });
   const defaults: HomepageSlide[] = products.filter((p) => getProductPhotos(p, overrides[p.id]).gallery.length > 0).slice(0, 3)

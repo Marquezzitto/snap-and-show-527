@@ -14,7 +14,7 @@ export function HomepageCarouselEditor() {
   const [productId, setProductId] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const replaceRef = useRef<HTMLInputElement>(null);
-  const target = useRef<string>();
+  const target = useRef<string | undefined>(undefined);
 
   async function persist(next: HomepageSlide[]) {
     setBusy(true);

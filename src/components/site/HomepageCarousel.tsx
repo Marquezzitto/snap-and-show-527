@@ -7,7 +7,7 @@ import { CatalogImage } from "./CatalogImage";
 import { getProductPhotos } from "@/data/productPhotos";
 import { useHomepageCarousel, resolveBanner } from "@/lib/homepage-carousel";
 
-export function BannerImage({ path, fallback, alt, className }: { path: string; fallback?: string; alt: string; className: string }) {
+export function BannerImage({ path, fallback, alt, className }: { path: string; fallback?: string | undefined; alt: string; className: string }) {
   const [resolved, setResolved] = useState<{ path: string; url: string }>();
   useEffect(() => {
     if (!path) return;
