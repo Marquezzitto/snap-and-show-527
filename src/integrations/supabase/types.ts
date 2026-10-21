@@ -62,6 +62,24 @@ export type Database = {
         }
         Relationships: []
       }
+      homepage_carousel: {
+        Row: {
+          id: string
+          slides: Json
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          slides?: Json
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          slides?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           cliente: Json

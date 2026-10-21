@@ -1,5 +1,7 @@
 # Entregas desta atualização
 
+- [ ] Adicionar carrossel de imagens na página inicial com envio, troca, exclusão e ordem editáveis no painel admin; preservar produtos e preços.
+
 - [x] Abrir cada produto em página própria, com seleção de opções, estoque e compra.
 - [x] Incorporar fotos verificadas da pasta compartilhada aos relógios correspondentes, mantendo foto da distribuidora nos demais.
 - [x] Corrigir aviso de envio de e-mail: não confirmar notificação que falhou; configurar envio quando o domínio estiver pronto.
