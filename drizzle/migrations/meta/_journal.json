@@ -8,6 +8,13 @@
       "when": 1792543378241,
       "tag": "0000_homepage_carousel",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792543398443,
+      "tag": "0001_homepage_banner_public_view",
+      "breakpoints": true
     }
   ]
 }
