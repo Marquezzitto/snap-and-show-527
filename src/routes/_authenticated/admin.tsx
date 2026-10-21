@@ -7,6 +7,7 @@ import { useEstoque, useIsAdmin } from "@/lib/estoque";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { useCatalog } from "@/lib/catalog";
 import { ProductEditor } from "@/components/site/ProductEditor";
+import { HomepageCarouselEditor } from "@/components/site/HomepageCarouselEditor";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -155,6 +156,7 @@ function Admin() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-4 py-8">
+        <HomepageCarouselEditor />
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
             <h1 className="text-2xl font-black">Gerenciar produtos, fotos e estoque</h1>

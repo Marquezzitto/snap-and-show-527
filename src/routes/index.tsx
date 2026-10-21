@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useCatalog } from "@/lib/catalog";
 import { CatalogImage } from "@/components/site/CatalogImage";
 import { useFavorites } from "@/lib/favorites";
+import { HomepageCarousel } from "@/components/site/HomepageCarousel";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -235,6 +236,8 @@ function Vitrine() {
           </div>
         </div>
       </section>
+
+      <HomepageCarousel />
 
       <main className="mx-auto max-w-6xl px-4 py-8">
         <nav aria-label="Categorias" className="mb-8 flex gap-2 overflow-x-auto border-b border-border pb-4">
