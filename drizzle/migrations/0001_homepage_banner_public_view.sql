@@ -1,0 +1,1 @@
+CREATE POLICY "Visitors view homepage banner files" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'homepage-banners');
