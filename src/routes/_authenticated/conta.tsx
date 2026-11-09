@@ -12,6 +12,7 @@ import { useCatalog } from "@/lib/catalog";
 import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/conta")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Minha conta — Marks Imports" },
     { name: "description", content: "Seu cadastro e seus pedidos na Marks Imports." },

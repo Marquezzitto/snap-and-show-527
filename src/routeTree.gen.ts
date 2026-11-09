@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CategoriasRouteImport } from './routes/categorias'
 import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCheckoutRouteImport } from './routes/_authenticated/checkout'
 import { Route as AuthenticatedContaRouteImport } from './routes/_authenticated/conta'
@@ -42,6 +43,11 @@ const CategoriasRoute = CategoriasRouteImport.update({
 const ContatoRoute = ContatoRouteImport.update({
   id: '/contato',
   path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/categorias': typeof CategoriasRoute
   '/contato': typeof ContatoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/conta': typeof AuthenticatedContaRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/categorias': typeof CategoriasRoute
   '/contato': typeof ContatoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/checkout': typeof AuthenticatedCheckoutRoute
   '/conta': typeof AuthenticatedContaRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/categorias': typeof CategoriasRoute
   '/contato': typeof ContatoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/checkout': typeof AuthenticatedCheckoutRoute
   '/_authenticated/conta': typeof AuthenticatedContaRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/categorias'
     | '/contato'
+    | '/sitemap.xml'
     | '/admin'
     | '/checkout'
     | '/conta'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/categorias'
     | '/contato'
+    | '/sitemap.xml'
     | '/admin'
     | '/checkout'
     | '/conta'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/categorias'
     | '/contato'
+    | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/_authenticated/checkout'
     | '/_authenticated/conta'
@@ -149,6 +161,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CategoriasRoute: typeof CategoriasRoute
   ContatoRoute: typeof ContatoRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ProdutoProductIdRoute: typeof ProdutoProductIdRoute
 }
 
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/contato'
       fullPath: '/contato'
       preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -250,6 +270,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CategoriasRoute: CategoriasRoute,
   ContatoRoute: ContatoRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ProdutoProductIdRoute: ProdutoProductIdRoute,
 }
 export const routeTree = rootRouteImport

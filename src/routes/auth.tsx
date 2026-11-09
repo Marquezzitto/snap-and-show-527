@@ -8,6 +8,7 @@ import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/auth")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Entrar — Marks Imports" },

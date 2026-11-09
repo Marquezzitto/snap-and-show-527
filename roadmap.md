@@ -1,5 +1,7 @@
 # Entregas desta atualização
 
+- [x] Corrigir a ausência do sitemap encontrada na revisão SEO aprovada, incluindo apenas páginas públicas e produtos visíveis. XML validado com 138 URLs, 135 produtos, nenhuma página privada e três testes aprovados.
+
 - [x] Adicionar carrossel de imagens clicáveis na página inicial com envio, troca, exclusão, ordem e seleção de produto editáveis no painel admin; preservar produtos e preços. Envio, substituição, exclusão e abertura do produto verificados com a conta administradora; celular sem transbordamento e sem erros de página.
 
 - [x] Abrir cada produto em página própria, com seleção de opções, estoque e compra.

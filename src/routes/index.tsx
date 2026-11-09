@@ -17,6 +17,7 @@ import { useFavorites } from "@/lib/favorites";
 import { HomepageCarousel } from "@/components/site/HomepageCarousel";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Marks Imports — Smartwatches, Wearzone e Acessórios" },

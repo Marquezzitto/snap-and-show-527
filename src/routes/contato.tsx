@@ -9,6 +9,7 @@ import { WHATSAPP } from "@/components/site/WhatsAppBubble";
 import { enviarContato } from "@/lib/pedido.functions";
 
 export const Route = createFileRoute("/contato")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Fale Conosco — Marks Imports" },

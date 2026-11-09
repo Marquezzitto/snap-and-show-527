@@ -16,6 +16,7 @@ import { CatalogImage } from "@/components/site/CatalogImage";
 import { useFavorites } from "@/lib/favorites";
 
 export const Route = createFileRoute("/produto/$productId")({
+  staticData: { sitemap: true },
   loader: ({ params }) => {
     const product = produtos.find((p) => p.id === params.productId);
     if (!product) throw notFound();
