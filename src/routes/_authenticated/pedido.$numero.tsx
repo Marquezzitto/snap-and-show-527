@@ -5,6 +5,7 @@ import { WHATSAPP } from "@/components/site/WhatsAppBubble";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/pedido/$numero")({
+  staticData: { sitemap: false },
   head: () => ({ meta: [
     { title: "Pedido recebido — Marks Imports" },
     { name: "description", content: "Consulte o número do seu pedido Marks Imports." },
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/_authenticated/pedido/$numero")({
     { property: "og:description", content: "Consulte o número do seu pedido Marks Imports." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
+    { name: "robots", content: "noindex" },
   ] }),
   component: Confirmacao,
 });

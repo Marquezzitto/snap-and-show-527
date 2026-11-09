@@ -10,6 +10,7 @@ import { ProductEditor } from "@/components/site/ProductEditor";
 import { HomepageCarouselEditor } from "@/components/site/HomepageCarouselEditor";
 
 export const Route = createFileRoute("/_authenticated/admin")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Administração de estoque — Marks Imports" },

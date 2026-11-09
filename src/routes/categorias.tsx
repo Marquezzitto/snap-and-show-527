@@ -6,6 +6,7 @@ import { CatalogImage } from "@/components/site/CatalogImage";
 import { getProductPhotos } from "@/data/productPhotos";
 
 export const Route = createFileRoute("/categorias")({
+  staticData: { sitemap: true },
   head: () => ({ meta: [
     { title: "Categorias — Marks Imports" }, { name: "description", content: "Explore as categorias de produtos Marks Imports." },
     { property: "og:title", content: "Categorias — Marks Imports" }, { property: "og:description", content: "Explore as categorias de produtos Marks Imports." },

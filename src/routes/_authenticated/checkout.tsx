@@ -27,6 +27,7 @@ import {
 } from "@/lib/pedido.functions";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Finalizar pedido — Marks Imports" },
@@ -44,6 +45,7 @@ export const Route = createFileRoute("/_authenticated/checkout")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+    { name: "robots", content: "noindex" },
     ],
   }),
   component: Checkout,
