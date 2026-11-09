@@ -16,3 +16,4 @@
 - Keep administrator catalog edits as role-protected overrides on the original catalog and revalidate prices during server-side checkout, so product pages, carts, and orders agree without replacing source products.
 - Keep this storefront web-only until app installation is explicitly requested again, so no service worker or offline cache can serve stale prices or inventory.
 - Store homepage carousel settings separately from the catalog, with admin-role protected writes and banner files in dedicated storage, so banner changes never affect products or prices.
+- Maintain the router-derived sitemap with explicit route inclusion decisions and paginated public catalog visibility reads; omit inferred timestamps so hidden products and private pages stay excluded.
