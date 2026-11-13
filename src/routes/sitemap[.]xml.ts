@@ -30,7 +30,7 @@ export const Route = createFileRoute("/sitemap.xml")({
               } },
             });
             const overrides = await collectPublicOverrides(async (offset, size) => {
-              const { data, error } = await client.rpc("hidden_product_ids").order("hidden_product_ids").range(offset, offset + size - 1);
+              const { data, error } = await client.rpc("hidden_product_ids").range(offset, offset + size - 1);
               if (error) throw error;
               return ((data ?? []) as string[]).map((product_id) => ({ product_id, visivel: false }));
             });
