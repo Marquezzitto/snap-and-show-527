@@ -157,7 +157,7 @@ export const criarPedido = createServerFn({ method: "POST" })
 
     const chaves = [...new Set([...pedidoPorCodigo.keys(), ...pedidoPorCor.keys()])];
     const { data: est, error: erroEstoque } = chaves.length
-      ? await context.supabase.from("estoque").select("codigo, quantidade").in("codigo", chaves)
+      ? await context.supabase.rpc("public_stock").in("codigo", chaves)
       : { data: [], error: null };
     if (erroEstoque) throw new Error("Não foi possível conferir o estoque. Tente novamente.");
     const codigosComCor = new Set((est ?? []).filter((e) => pedidoPorCor.has(e.codigo)).map((e) => e.codigo.split(":")[0]));

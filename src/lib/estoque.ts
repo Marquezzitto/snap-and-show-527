@@ -7,7 +7,7 @@ export function useEstoque() {
   const [estoque, setEstoque] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const recarregar = useCallback(async () => {
-    const { data } = await supabase.from("estoque").select("codigo, quantidade");
+    const { data } = await supabase.rpc("public_stock");
     setEstoque(Object.fromEntries((data ?? []).map((r) => [r.codigo, r.quantidade])));
     setLoading(false);
   }, []);

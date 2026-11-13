@@ -257,6 +257,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      hidden_product_ids: { Args: never; Returns: string[] }
+      public_stock: {
+        Args: never
+        Returns: {
+          codigo: string
+          quantidade: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "user"

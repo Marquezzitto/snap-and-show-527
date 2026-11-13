@@ -30,8 +30,14 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   async function refresh() {
-    const { data, error } = await supabase.from("product_overrides").select("product_id,nome,descricao,preco_vista,visivel,fotos_adicionais,fotos_ocultas,fotos_cores");
-    if (!error) { setOverrides(Object.fromEntries((data ?? []).map((row) => [row.product_id, row as unknown as ProductOverride]))); setFailed(false); }
+    const [{ data, error }, hidden] = await Promise.all([
+      supabase.from("product_overrides").select("product_id,nome,descricao,preco_vista,visivel,fotos_adicionais,fotos_ocultas,fotos_cores"),
+      supabase.rpc("hidden_product_ids"),
+    ]);
+    if (!error && !hidden.error) {
+      const map: Record<string, ProductOverride> = Object.fromEntries((data ?? []).map((row) => [row.product_id, row as unknown as ProductOverride]));
+      for (const id of (hidden.data ?? []) as string[]) if (!map[id]) map[id] = { product_id: id, nome: null, descricao: null, preco_vista: null, visivel: false, fotos_adicionais: [], fotos_ocultas: [], fotos_cores: {} };
+      setOverrides(map); setFailed(false); }
     else setFailed(true);
     setReady(true);
   }
