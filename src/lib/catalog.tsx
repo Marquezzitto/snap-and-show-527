@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { supabase } from "@/integrations/supabase/client";
 import { produtos, type Produto } from "@/data/products";
 import { valorParcela } from "@/lib/pricing";
+import { signCatalogPhoto } from "@/lib/catalog-photo.functions";
 
 export interface ProductOverride {
   product_id: string;
@@ -49,6 +50,8 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
 export const useCatalog = () => useContext(CatalogContext);
 
 export async function resolveCatalogPhoto(path: string): Promise<string | null> {
-  const { data, error } = await supabase.storage.from("catalog-photos").createSignedUrl(path, 3600);
-  return error ? null : data.signedUrl;
+  // Administrators read the bucket directly (covers hidden products); visitors go through the server check.
+  const direct = await supabase.storage.from("catalog-photos").createSignedUrl(path, 3600);
+  if (!direct.error) return direct.data.signedUrl;
+  try { return (await signCatalogPhoto({ data: { path } })).url; } catch { return null; }
 }
