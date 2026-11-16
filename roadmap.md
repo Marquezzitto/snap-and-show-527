@@ -23,7 +23,7 @@
 - [x] Preservar a edição existente e os preços sob consulta; mostrar “Sem estoque” para estoque zerado, sem alterar preços ou quantidades. Verificado na vitrine e na página do produto com estoque simulado.
 - [x] Preservar catálogo existente e permitir ao admin editar preços, informações, visibilidade e fotos, com segurança.
 - [ ] Deixar no acesso da proprietária controles visíveis para adicionar, editar e excluir itens, fotos, vídeos e valores.
-- [ ] Concluir os campos obrigatórios do modelo Shopee — 135 produtos e 380 opções conferidos, links de fotos corrigidos e testados; aguarda pesos embalados, seis preços sob consulta e confirmação logística/fiscal e do saldo por opção.
+- [ ] Concluir os campos obrigatórios do modelo Shopee — versão revisada com 133 produtos e 378 opções, quatro preços informados aplicados, 0160/0235 excluídos só da planilha e peso/caixa reais para 126 produtos; aguarda peso/caixa de 0082, 0091, 0092, 0147, 0148, 0271 e MW-93P, lista de estoque por opção e confirmação logística/fiscal.
 - [x] Aplicar preços editados no carrinho, frete e pedidos.
 - [x] Melhorar navegação e uso da loja no celular sem alterar desktop.
 - [ ] Instalação como aplicativo e suporte offline — adiado a pedido do usuário para outro momento.
